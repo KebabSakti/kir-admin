@@ -6,6 +6,7 @@ export enum Status {
 
 export interface State<T> {
   status: Status;
+  action?: string;
   data?: T | Array<T> | undefined;
   error?: Error;
 }

@@ -2,12 +2,12 @@ import { ErrorMessage, Field } from "formik";
 import { ReactNode, useRef, useState } from "react";
 import { isValidFileType } from "../../../common/utility";
 
-export type AddKirSectionParam = {
+export type KirSectionParam = {
   title: string;
   subtitle: string;
 };
 
-export type AddKirFieldParam = {
+export type KirFieldParam = {
   title: string;
   subtitle: string;
   type?: string;
@@ -16,19 +16,20 @@ export type AddKirFieldParam = {
   placeholder?: string;
 };
 
-export type AddKirUploadParam = {
+export type KirUploadParam = {
   title: string;
   subtitle: string;
   name: string;
+  image?: string;
   setFieldValue: Function;
 };
 
-export function AddKirSection({
+export function KirSection({
   children,
   param,
 }: {
   children: ReactNode;
-  param: AddKirSectionParam;
+  param: KirSectionParam;
 }) {
   return (
     <>
@@ -51,12 +52,12 @@ export function AddKirSection({
   );
 }
 
-export function AddKirField({
+export function KirField({
   children,
   param,
 }: {
   children?: ReactNode;
-  param: AddKirFieldParam;
+  param: KirFieldParam;
 }) {
   return (
     <>
@@ -90,7 +91,7 @@ export function AddKirField({
   );
 }
 
-export function AddKirUpload({ param }: { param: AddKirUploadParam }) {
+export function KirUpload({ param }: { param: KirUploadParam }) {
   const ref: any = useRef(null);
   const [image, setImage] = useState<File>();
 
@@ -106,8 +107,17 @@ export function AddKirUpload({ param }: { param: AddKirUploadParam }) {
           if (image) {
             return (
               <img
-                className="h-20 object-cover rounded-lg lg:h-30"
+                className="bg-gray h-20 object-cover rounded-lg lg:h-30"
                 src={URL.createObjectURL(image)}
+              />
+            );
+          }
+
+          if (param.image != undefined) {
+            return (
+              <img
+                className="bg-gray h-20 object-cover rounded-lg lg:h-30"
+                src={param.image}
               />
             );
           }

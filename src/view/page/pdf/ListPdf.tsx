@@ -4,127 +4,45 @@ import { Status } from "../../../common/type";
 import Breadcrumb from "../../component/Breadcrumb";
 import { LoadingContainer } from "../../component/LoadingContainer";
 import PageTitle from "../../component/PageTitle";
-import { useKirApi } from "./KirHook";
+import { usePdfApi } from "./PdfHook";
 
-export function ListKir() {
-  const kirApi = useKirApi();
+export function ListPdf() {
+  const pdfApi = usePdfApi();
 
   useEffect(() => {
-    if (kirApi.state.status == Status.idle && kirApi.state.data == undefined) {
-      kirApi.list();
+    if (pdfApi.state.status == Status.idle && pdfApi.state.data == undefined) {
+      pdfApi.list();
     }
-
-    if (
-      kirApi.state.action == "remove" &&
-      kirApi.state.status == Status.complete &&
-      kirApi.state.error == undefined
-    ) {
-      kirApi.list();
-      alert("Data berhasil dihapus");
-    }
-
-    if (
-      kirApi.state.action == "remove" &&
-      kirApi.state.status == Status.complete &&
-      kirApi.state.error != undefined
-    ) {
-      alert("Terjadi kesalahan, harap coba beberapa saat lagi");
-    }
-
-    console.log(kirApi.state);
-  }, [kirApi.state]);
+  }, [pdfApi.state]);
 
   return (
     <>
-      <PageTitle title="Daftar Kir | Uji Kir App" />
+      <PageTitle title="Setting | Uji Kir App" />
       <div className="mx-auto max-w-270">
-        <Breadcrumb pageName="Daftar Kir" />
+        <Breadcrumb pageName="Setting Dokumen" />
         <div className="rounded-sm border border-stroke bg-white p-7 shadow-default overflow-x-scroll dark:border-strokedark dark:bg-boxdark">
           <LoadingContainer loading={false}>
             <div className="flex flex-col gap-4">
-              <div className="flex gap-4 justify-between items-center">
-                <Link
-                  to="/app/kir/add"
-                  className="bg-primary text-white p-2 rounded h-10 flex items-center justify-center"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-6 stroke-white stroke-2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 4.5v15m7.5-7.5h-15"
-                    />
-                  </svg>
-                  <div>Baru</div>
-                </Link>
-                <div className="flex gap-4 items-center">
-                  <input
-                    type="text"
-                    placeholder="Nomor Sertifikat"
-                    className="w-fit h-10 rounded border border-stroke bg-gray p-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                  />
-                  <div className="flex gap-1 items-center">
-                    <button className="bg-blue-500 h-10 p-2 rounded">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-6 stroke-white stroke-2"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15.75 19.5 8.25 12l7.5-7.5"
-                        />
-                      </svg>
-                    </button>
-                    <button className="bg-blue-500 h-10 p-2 rounded">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-6 stroke-white stroke-2"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
               <table className="w-full">
                 <thead>
                   <tr>
                     <th className="font-semibold text-sm text-start p-2 bg-gray text-black dark:text-white dark:bg-graydark">
-                      No. Sertifikat
+                      Judul
                     </th>
                     <th className="font-semibold text-sm text-start p-2 bg-gray text-black dark:text-white dark:bg-graydark">
-                      Pemilik
+                      Nama
                     </th>
                     <th className="font-semibold text-sm text-start p-2 bg-gray text-black dark:text-white dark:bg-graydark">
-                      No. Uji
+                      Level
                     </th>
                     <th className="font-semibold text-sm text-start p-2 bg-gray text-black dark:text-white dark:bg-graydark">
-                      Status
+                      Nomor
                     </th>
                     <th className="font-semibold text-sm text-start p-2 bg-gray text-black dark:text-white dark:bg-graydark">
-                      Tgl. Terbit
+                      Stempel
                     </th>
                     <th className="font-semibold text-sm text-start p-2 bg-gray text-black dark:text-white dark:bg-graydark">
-                      Tgl. Expired
+                      TTD
                     </th>
                     <th className="font-semibold text-sm text-start p-2 bg-gray text-black dark:text-white dark:bg-graydark">
                       #
@@ -134,65 +52,60 @@ export function ListKir() {
                 <tbody>
                   {(() => {
                     if (
-                      kirApi.state.status == Status.complete &&
-                      kirApi.state.data instanceof Array
+                      pdfApi.state.status == Status.complete &&
+                      pdfApi.state.data instanceof Array
                     ) {
-                      if (kirApi.state.data.length > 0) {
+                      if (pdfApi.state.data.length > 0) {
                         return (
                           <>
-                            {kirApi.state.data.map((item) => {
+                            {pdfApi.state.data.map((item) => {
                               return (
                                 <tr
                                   key={item.id}
                                   className="odd:bg-slate-50 odd:dark:bg-form-strokedark even:bg-slate-100 even:dark:bg-graydark hover:bg-slate-200 hover:dark:bg-slate-800"
                                 >
                                   <td className="text-sm text-start p-2 text-black dark:text-white">
-                                    {item.certificateNumber}
+                                    {item.title}
                                   </td>
                                   <td className="text-sm text-start p-2 text-black dark:text-white">
-                                    {item.owner}
+                                    {item.name}
                                   </td>
                                   <td className="text-sm text-start p-2 text-black dark:text-white">
-                                    {item.inspectionNumber}
+                                    {item.level}
                                   </td>
                                   <td className="text-sm text-start p-2 text-black dark:text-white">
-                                    {item.inspectionResult}
+                                    {item.number}
                                   </td>
                                   <td className="text-sm text-start p-2 text-black dark:text-white">
-                                    {item.created?.toDateString()}
+                                    <a
+                                      href={item.stamp as string}
+                                      target="_blank"
+                                    >
+                                      <img
+                                        src={item.stamp as string}
+                                        className="w-10"
+                                      />
+                                    </a>
                                   </td>
                                   <td className="text-sm text-start p-2 text-black dark:text-white">
-                                    {item.created?.toDateString()}
+                                    <a
+                                      href={item.signature as string}
+                                      target="_blank"
+                                    >
+                                      <img
+                                        src={item.signature as string}
+                                        className="w-10"
+                                      />
+                                    </a>
                                   </td>
                                   <td className="p-2">
                                     <div className="flex gap-1">
                                       <Link
-                                        to=""
-                                        className="p-2 bg-green-500 text-white rounded text-xs font-semibold"
-                                      >
-                                        PDF
-                                      </Link>
-                                      <Link
-                                        to={`/app/kir/${item.id}/edit`}
+                                        to={`/app/setting/${item.id}/edit`}
                                         className="p-2 bg-orange-500 text-white rounded text-xs font-semibold"
                                       >
                                         Edit
                                       </Link>
-                                      <button
-                                        type="button"
-                                        className="p-2 bg-red-500 text-white rounded text-xs font-semibold"
-                                        onClick={() => {
-                                          if (
-                                            confirm(
-                                              "Data akan dihapus, proses ini tidak dapat dikembalikan. Anda yakin?"
-                                            )
-                                          ) {
-                                            kirApi.remove(item.id!);
-                                          }
-                                        }}
-                                      >
-                                        Hapus
-                                      </button>
                                     </div>
                                   </td>
                                 </tr>
@@ -215,8 +128,8 @@ export function ListKir() {
                     }
 
                     if (
-                      kirApi.state.status == Status.complete &&
-                      kirApi.state.error != undefined
+                      pdfApi.state.status == Status.complete &&
+                      pdfApi.state.error != undefined
                     ) {
                       return (
                         <tr>
@@ -226,13 +139,13 @@ export function ListKir() {
                           >
                             <div className="flex flex-col items-center gap-2">
                               <div className="text-red-500">
-                                {kirApi.state.error.message}
+                                {pdfApi.state.error.message}
                               </div>
                               <button
                                 type="button"
                                 className="bg-primary py-1 px-2 rounded text-white w-fit"
                                 onClick={() => {
-                                  kirApi.list();
+                                  pdfApi.list();
                                 }}
                               >
                                 Coba lagi

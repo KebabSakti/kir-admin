@@ -1,4 +1,4 @@
-import { Unauthorized, NotFound } from "../../common/error";
+import { NotFound, Unauthorized } from "../../common/error";
 import { delay } from "../../common/utility";
 import { Admin } from "./admin";
 import { AuthAccountUpdateParam, AuthApi, AuthLoginParam } from "./auth_api";
@@ -14,13 +14,13 @@ export class AuthMock implements AuthApi {
 
   async update(param: AuthAccountUpdateParam): Promise<void> {
     await delay(1000);
-    const userIsValid = await this.isUserValid(param.email, param.password);
+    const userIsValid = await this.isUserValid(param.email, param.oldPassword);
 
     if (userIsValid) {
       this.user = {
         ...this.user,
         email: param.email,
-        password: param.password,
+        password: param.newPassword,
       };
     }
   }

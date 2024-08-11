@@ -13,10 +13,20 @@ export function LoginPage() {
 
   useEffect(() => {
     if (
+      authApi.state.action == "login" &&
       authApi.state.status == Status.complete &&
-      authApi.state.data != undefined
+      authApi.state.data != undefined &&
+      authApi.state.error == undefined
     ) {
       navigate("/app/kir/add", { replace: true });
+    }
+
+    if (
+      authApi.state.action == "login" &&
+      authApi.state.status == Status.complete &&
+      authApi.state.error != undefined
+    ) {
+      alert("Terjadi kesalahan, harap coba beberapa saat lagi");
     }
   }, [authApi.state]);
 

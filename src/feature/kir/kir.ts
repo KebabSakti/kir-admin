@@ -11,10 +11,10 @@ export interface Kir {
   chasisNumber?: string;
   engineNumber?: string;
   inspectionNumber?: string;
-  frontPic?: string;
-  backPic?: string;
-  rightPic?: string;
-  leftPic?: string;
+  frontPic?: string | File;
+  backPic?: string | File;
+  rightPic?: string | File;
+  leftPic?: string | File;
   vehicleType?: string;
   vehicleBrand?: string;
   yearManufacture?: string;

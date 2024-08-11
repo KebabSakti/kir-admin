@@ -1,7 +1,7 @@
 export type AuthAccountUpdateParam = {
-  id: string;
   email: string;
-  password: string;
+  oldPassword: string;
+  newPassword: string;
 };
 
 export type AuthLoginParam = {

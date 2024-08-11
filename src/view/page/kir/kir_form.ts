@@ -40,10 +40,10 @@ export const addKirInitialValues: any = {
   headLamp3: "",
   headLamp4: "",
   inspectionResult: "",
-  frontPicFile: "",
-  backPicFile: "",
-  rightPicFile: "",
-  leftPicFile: "",
+  frontPic: "",
+  backPic: "",
+  rightPic: "",
+  leftPic: "",
 };
 
 export const addKirValidationSchema = Yup.object({
@@ -86,8 +86,12 @@ export const addKirValidationSchema = Yup.object({
   headLamp3: Yup.string().required("* Tidak boleh kosong"),
   headLamp4: Yup.string().required("* Tidak boleh kosong"),
   inspectionResult: Yup.string().required("* Pilih salah satu"),
-  frontPicFile: Yup.mixed().required("* Diperlukan"),
-  backPicFile: Yup.mixed().required("* Diperlukan"),
-  rightPicFile: Yup.mixed().required("* Diperlukan"),
-  leftPicFile: Yup.mixed().required("* Diperlukan"),
+  frontPic: Yup.mixed().required("* Diperlukan"),
+  backPic: Yup.mixed().required("* Diperlukan"),
+  rightPic: Yup.mixed().required("* Diperlukan"),
+  leftPic: Yup.mixed().required("* Diperlukan"),
 });
+
+export const editKirInitialValues = { ...addKirInitialValues };
+
+export const editKirValidationSchema = { ...addKirValidationSchema };

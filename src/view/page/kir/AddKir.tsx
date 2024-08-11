@@ -1,13 +1,13 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Status } from "../../../common/type";
 import Breadcrumb from "../../component/Breadcrumb";
 import { LoadingContainer } from "../../component/LoadingContainer";
 import PageTitle from "../../component/PageTitle";
-import { AddKirField, AddKirSection, AddKirUpload } from "./AddKirComponent";
 import { addKirInitialValues, addKirValidationSchema } from "./kir_form";
+import { KirField, KirSection, KirUpload } from "./KirComponent";
 import { useKirApi } from "./KirHook";
-import { useNavigate } from "react-router-dom";
 
 export function AddKir() {
   const kirApi = useKirApi();
@@ -15,10 +15,20 @@ export function AddKir() {
 
   useEffect(() => {
     if (
+      kirApi.state.action == "create" &&
       kirApi.state.status == Status.complete &&
-      kirApi.state.data == undefined
+      kirApi.state.error == undefined
     ) {
-      kirApi.list();
+      navigate("/app/kir", { replace: true });
+      alert("Data berhasil di simpan");
+    }
+
+    if (
+      kirApi.state.action == "create" &&
+      kirApi.state.status == Status.complete &&
+      kirApi.state.error != undefined
+    ) {
+      alert("Terjadi kesalahan, harap coba beberapa saat lagi");
     }
   }, [kirApi.state]);
 
@@ -31,22 +41,21 @@ export function AddKir() {
           <Formik
             initialValues={addKirInitialValues}
             validationSchema={addKirValidationSchema}
-            onSubmit={async (values) => {
-              await kirApi.create(values);
-              navigate("/app/kir", { replace: true });
+            onSubmit={(values) => {
+              kirApi.create(values);
             }}
           >
             {({ setFieldValue }) => {
               return (
                 <Form action="#">
                   <div className="flex flex-col gap-2">
-                    <AddKirSection
+                    <KirSection
                       param={{
                         title: "IDENTITAS PEMILIK KENDARAAN BERMOTOR",
                         subtitle: "VEHICLE OWNER IDENTIFICATION",
                       }}
                     >
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Nama pemilik",
                           subtitle: "Owner's name",
@@ -56,7 +65,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Alamat pemilik",
                           subtitle: "Owner's address",
@@ -66,15 +75,15 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                    </AddKirSection>
+                    </KirSection>
 
-                    <AddKirSection
+                    <KirSection
                       param={{
                         title: "IDENTITAS KENDARAAN BERMOTOR",
                         subtitle: "VEHICLE IDENTIFICATION",
                       }}
                     >
-                      <AddKirField
+                      <KirField
                         param={{
                           title:
                             "Nomor dan tanggal sertifikat registrasi uji tipe",
@@ -86,7 +95,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Nomor registrasi kendaraan",
                           subtitle: "Vehicle registration number",
@@ -96,7 +105,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Nomor rangka kendaraan",
                           subtitle: "Chasis number",
@@ -106,7 +115,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Nomor motor penggerak",
                           subtitle: "Engine number",
@@ -116,7 +125,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Nomor uji kendaraan",
                           subtitle: "Vehicle inspection number",
@@ -126,57 +135,57 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                    </AddKirSection>
+                    </KirSection>
 
-                    <AddKirSection
+                    <KirSection
                       param={{
                         title: "FOTO BERWARNA KENDARAAN",
                         subtitle: "Vehicle colored photo",
                       }}
                     >
                       <div className="flex justify-between">
-                        <AddKirUpload
+                        <KirUpload
                           param={{
                             title: "Foto Depan",
                             subtitle: "Front Picture",
-                            name: "frontPicFile",
+                            name: "frontPic",
                             setFieldValue: setFieldValue,
                           }}
                         />
-                        <AddKirUpload
+                        <KirUpload
                           param={{
                             title: "Foto Belakang",
                             subtitle: "Back Picture",
-                            name: "backPicFile",
+                            name: "backPic",
                             setFieldValue: setFieldValue,
                           }}
                         />
-                        <AddKirUpload
+                        <KirUpload
                           param={{
                             title: "Foto Kanan",
                             subtitle: "Right Picture",
-                            name: "rightPicFile",
+                            name: "rightPic",
                             setFieldValue: setFieldValue,
                           }}
                         />
-                        <AddKirUpload
+                        <KirUpload
                           param={{
                             title: "Foto Kiri",
                             subtitle: "Left Picture",
-                            name: "leftPicFile",
+                            name: "leftPic",
                             setFieldValue: setFieldValue,
                           }}
                         />
                       </div>
-                    </AddKirSection>
+                    </KirSection>
 
-                    <AddKirSection
+                    <KirSection
                       param={{
                         title: "SPESIFIKASI TEKNIS KENDARAAN",
                         subtitle: "VEHICLE TECHNICAL SPESIFICATIONS",
                       }}
                     >
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Jenis",
                           subtitle: "Purpose of vehicle",
@@ -186,7 +195,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Merk/tipe",
                           subtitle: "Brand/type",
@@ -196,7 +205,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Tahun pembuatan/perakitan",
                           subtitle: "Year manufactured/assembled",
@@ -206,7 +215,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Bahan bakar/sumber energi",
                           subtitle: "Fuel/energy source",
@@ -216,7 +225,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Isi silinder",
                           subtitle: "Engine capacity",
@@ -226,7 +235,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Daya motor",
                           subtitle: "Engine power",
@@ -236,7 +245,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Ukuran ban",
                           subtitle: "Tyre size",
@@ -246,7 +255,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Konfigurasi sumbu",
                           subtitle: "Axle configuration",
@@ -256,7 +265,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Berat kosong kendaraan",
                           subtitle: "Curb weight",
@@ -270,7 +279,7 @@ export function AddKir() {
                         Dimensi utama kendaraan bermotor (Vehicle main
                         dimension)
                       </div>
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Panjang",
                           subtitle: "Length",
@@ -280,7 +289,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Lebar",
                           subtitle: "Width",
@@ -290,7 +299,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Tinggi",
                           subtitle: "Height",
@@ -300,7 +309,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Julur depan",
                           subtitle: "Front everhang",
@@ -310,7 +319,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Julur belakang",
                           subtitle: "Back overhang",
@@ -323,7 +332,7 @@ export function AddKir() {
                       <div className="text-[16px] font-semibold text-black dark:text-white">
                         Jarak sumbu (Wheel base)
                       </div>
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Sumbu I-II",
                           subtitle: "",
@@ -333,7 +342,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Sumbu II-III",
                           subtitle: "",
@@ -343,7 +352,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Sumbu III-IV",
                           subtitle: "",
@@ -353,7 +362,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Dimensi bak muatan/tangki",
                           subtitle: "",
@@ -366,7 +375,7 @@ export function AddKir() {
                       <div className="text-[16px] font-semibold text-black dark:text-white">
                         Dimension of cargo tub (length x width x height)
                       </div>
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "JBB/JBKB",
                           subtitle: "GVW/GVCW",
@@ -376,7 +385,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "JBI/JBKI",
                           subtitle: "PVW/PVCW",
@@ -386,7 +395,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Daya angkut (orang/kg)",
                           subtitle: "Payload (person(s)/kg(s))",
@@ -396,7 +405,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <AddKirField
+                      <KirField
                         param={{
                           title: "Kelas jalan terendah yang boleh dilalui",
                           subtitle: "Lowest class road permitted",
@@ -406,7 +415,7 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                    </AddKirSection>
+                    </KirSection>
 
                     <div className="col-span-5 xl:col-span-3">
                       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -720,7 +729,7 @@ export function AddKir() {
                         type="submit"
                         className="p-2 w-full h-12 bg-primary rounded text-white"
                       >
-                        Simpan & Export Ke PDF
+                        Simpan Data
                       </button>
                     </div>
                   </div>

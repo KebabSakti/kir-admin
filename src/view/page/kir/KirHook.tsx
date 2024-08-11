@@ -24,122 +24,122 @@ export function useKirApi(): KirApiType {
   });
 
   async function create(param: KirCreateParam): Promise<void> {
-    setState({ status: Status.loading });
+    setState({ status: Status.loading, action: "create" });
 
     await kirApi
       .create(param)
       .then(() => {
         setState({
           status: Status.complete,
+          action: "create",
         });
       })
       .catch((error: Error) => {
         setState({
           status: Status.complete,
+          action: "create",
           error: error,
         });
       });
   }
 
   async function read(id: string): Promise<void> {
-    setState({ ...state, status: Status.loading, error: undefined });
+    setState({ status: Status.loading, action: "read" });
 
     await kirApi
       .read(id)
       .then((result) => {
         setState({
-          ...state,
           status: Status.complete,
+          action: "read",
           data: result,
-          error: undefined,
         });
       })
       .catch((error: Error) => {
         setState({
-          ...state,
           status: Status.complete,
+          action: "read",
           error: error,
         });
       });
   }
 
   async function update(param: KirUpdateParam): Promise<void> {
-    setState({ ...state, status: Status.loading, error: undefined });
+    setState({ status: Status.loading, action: "update" });
 
     await kirApi
       .update(param)
       .then(() => {
         setState({
-          ...state,
           status: Status.complete,
-          error: undefined,
+          action: "update",
         });
       })
       .catch((error: Error) => {
         setState({
-          ...state,
           status: Status.complete,
+          action: "update",
           error: error,
         });
       });
   }
 
   async function remove(id: string): Promise<void> {
-    setState({ ...state, status: Status.loading, error: undefined });
+    setState({ status: Status.loading, action: "remove" });
 
     await kirApi
       .remove(id)
       .then(() => {
         setState({
-          ...state,
           status: Status.complete,
-          error: undefined,
+          action: "remove",
         });
       })
       .catch((error: Error) => {
         setState({
-          ...state,
           status: Status.complete,
+          action: "remove",
           error: error,
         });
       });
   }
 
   async function list(param?: KirListParam): Promise<void> {
-    setState({ status: Status.loading });
+    setState({ status: Status.loading, action: "list" });
 
     await kirApi
       .list(param)
       .then((result) => {
         setState({
           status: Status.complete,
+          action: "list",
           data: result,
         });
       })
       .catch((error: Error) => {
         setState({
           status: Status.complete,
+          action: "list",
           error: error,
         });
       });
   }
 
   async function print(id: string): Promise<void> {
-    setState({ ...state, status: Status.loading, error: undefined });
+    setState({ status: Status.loading, action: "print" });
 
     await kirApi
       .print(id)
       .then(() => {
         setState({
-          ...state,
           status: Status.complete,
-          error: undefined,
+          action: "print",
         });
       })
       .catch((error: Error) => {
         setState({
-          ...state,
           status: Status.complete,
+          action: "print",
           error: error,
         });
       });

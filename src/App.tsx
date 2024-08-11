@@ -5,17 +5,18 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Layout from "./view/component/Layout";
+import { ErrorPage } from "./view/page/ErrorPage";
 import { Middleware } from "./view/page/Middleware";
-import { AuthApiType, useAuthApi } from "./view/page/auth/AuthHook";
+import { AccountPage } from "./view/page/auth/AccountPage";
 import { LoginPage } from "./view/page/auth/LoginPage";
 import { RecoveryPage } from "./view/page/auth/RecoveryPage";
 import { AddKir } from "./view/page/kir/AddKir";
 import { EditKir } from "./view/page/kir/EditKir";
 import { ListKir } from "./view/page/kir/ListKir";
+import { EditPdf } from "./view/page/pdf/EditPdf";
+import { ListPdf } from "./view/page/pdf/ListPdf";
 
-type Dependencies = {
-  authApi: AuthApiType;
-};
+type Dependencies = {};
 
 export const Context = createContext<Dependencies | undefined>(undefined);
 
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/app",
+    errorElement: <ErrorPage />,
     element: (
       <Middleware>
         <Layout />
@@ -52,14 +54,24 @@ const router = createBrowserRouter([
         path: "/app/kir/:id/edit",
         element: <EditKir />,
       },
+      {
+        path: "/app/account",
+        element: <AccountPage />,
+      },
+      {
+        path: "/app/setting",
+        element: <ListPdf />,
+      },
+      {
+        path: "/app/setting/:id/edit",
+        element: <EditPdf />,
+      },
     ],
   },
 ]);
 
 export function App() {
-  const dependencies: Dependencies = {
-    authApi: useAuthApi(),
-  };
+  const dependencies: Dependencies = {};
 
   return (
     <Context.Provider value={dependencies}>
