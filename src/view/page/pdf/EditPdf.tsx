@@ -43,8 +43,6 @@ export function EditPdf() {
     ) {
       alert("Terjadi kesalahan, harap coba beberapa saat lagi");
     }
-
-    console.log(pdfApi.state);
   }, [pdfApi.state]);
 
   return (

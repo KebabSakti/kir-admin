@@ -30,8 +30,6 @@ export function ListKir() {
     ) {
       alert("Terjadi kesalahan, harap coba beberapa saat lagi");
     }
-
-    console.log(kirApi.state);
   }, [kirApi.state]);
 
   return (

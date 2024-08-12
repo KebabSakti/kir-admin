@@ -32,7 +32,7 @@ export function EditKir() {
     if (
       kirApi.state.action == "read" &&
       kirApi.state.status == Status.complete &&
-      kirApi.state.error != undefined
+      (kirApi.state.error != undefined || kirApi.state.data == undefined)
     ) {
       navigate("/app/kir", { replace: true });
       alert("Terjadi kesalahan, harap coba beberapa saat lagi");
@@ -54,6 +54,8 @@ export function EditKir() {
     ) {
       alert("Terjadi kesalahan, harap coba beberapa saat lagi");
     }
+
+    console.log(kirApi.state);
   }, [kirApi.state]);
 
   return (
