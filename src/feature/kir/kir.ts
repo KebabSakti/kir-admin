@@ -4,6 +4,8 @@ export interface Kir {
   director?: string;
   directorLevel?: string;
   directorNip?: string;
+  directorStamp?: string;
+  directorSignature?: string;
   owner?: string;
   address?: string;
   registrationDate?: Date;
@@ -51,13 +53,13 @@ export interface Kir {
   inspector?: string;
   inspectorLevel?: string;
   inspectorNumber?: string;
+  inspectorStamp?: string;
+  inspectorSignature?: string;
   agency?: string;
   agencyLevel?: string;
   agencyNumber?: string;
-  stamp1?: string;
-  stamp2?: string;
-  sign1?: string;
-  sign2?: string;
+  agencyStamp?: string;
+  agencySignature?: string;
   qr?: string;
   created?: Date;
   updated?: Date;
