@@ -1,44 +1,31 @@
 import { Form, Formik } from "formik";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Status } from "../../../common/type";
 import Breadcrumb from "../../component/Breadcrumb";
 import { LoadingContainer } from "../../component/LoadingContainer";
 import PageTitle from "../../component/PageTitle";
-import { editPdfInitialValues, editPdfValidationSchema } from "./pdf_form";
+import { addPdfInitialValues, addPdfValidationSchema } from "./pdf_form";
 import { PdfField, PdfSection, PdfUpload } from "./PdfComponent";
 import { usePdfApi } from "./PdfHook";
-import { toast } from "react-toastify";
 
-export function EditPdf() {
-  const { id } = useParams();
+export function AddPdf() {
   const pdfApi = usePdfApi();
   const navigate = useNavigate();
-  const [initialValues, setInitialValues] = useState(editPdfInitialValues);
 
   useEffect(() => {
-    if (pdfApi.state.status == Status.idle && pdfApi.state.data == undefined) {
-      pdfApi.read(id!);
-    }
-
     if (
-      pdfApi.state.action == "read" &&
-      pdfApi.state.status == Status.complete &&
-      pdfApi.state.data != undefined
-    ) {
-      setInitialValues(pdfApi.state.data);
-    }
-
-    if (
-      pdfApi.state.action == "update" &&
+      pdfApi.state.action == "create" &&
       pdfApi.state.status == Status.complete &&
       pdfApi.state.error == undefined
     ) {
       navigate("/app/setting", { replace: true });
-      toast.success("Data berhasil di update");
+      toast.success("Data berhasil di simpan");
     }
 
     if (
+      pdfApi.state.action == "create" &&
       pdfApi.state.status == Status.complete &&
       pdfApi.state.error != undefined
     ) {
@@ -50,17 +37,17 @@ export function EditPdf() {
     <>
       <PageTitle title="Edit Data  | Uji Kir App" />
       <div className="mx-auto max-w-270">
-        <Breadcrumb pageName="Edit Data" />
+        <Breadcrumb pageName="Tambah Data" />
         <LoadingContainer loading={pdfApi.state.status == Status.loading}>
           <Formik
             enableReinitialize
-            initialValues={initialValues}
-            validationSchema={editPdfValidationSchema}
+            initialValues={addPdfInitialValues}
+            validationSchema={addPdfValidationSchema}
             onSubmit={(values) => {
-              pdfApi.update(values);
+              pdfApi.create(values);
             }}
           >
-            {({ setFieldValue, values }) => {
+            {({ setFieldValue }) => {
               return (
                 <Form action="#">
                   <div className="flex flex-col gap-2">
@@ -108,7 +95,6 @@ export function EditPdf() {
                           param={{
                             title: "Stempel",
                             name: "stamp",
-                            image: values.stamp,
                             setFieldValue: setFieldValue,
                           }}
                         />
@@ -116,7 +102,6 @@ export function EditPdf() {
                           param={{
                             title: "TTD",
                             name: "signature",
-                            image: values.signature,
                             setFieldValue: setFieldValue,
                           }}
                         />
@@ -128,7 +113,7 @@ export function EditPdf() {
                         type="submit"
                         className="p-2 w-full h-12 bg-primary rounded text-white"
                       >
-                        Update Data
+                        Simpan Data
                       </button>
                     </div>
                   </div>

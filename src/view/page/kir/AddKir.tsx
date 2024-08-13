@@ -1,7 +1,9 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Status } from "../../../common/type";
+import { Pdf } from "../../../feature/pdf/pdf";
 import Breadcrumb from "../../component/Breadcrumb";
 import { LoadingContainer } from "../../component/LoadingContainer";
 import PageTitle from "../../component/PageTitle";
@@ -14,7 +16,6 @@ import {
   KirUpload,
 } from "./KirComponent";
 import { useKirApi } from "./KirHook";
-import { Pdf } from "../../../feature/pdf/pdf";
 
 export function AddKir() {
   const kirApi = useKirApi();
@@ -31,7 +32,7 @@ export function AddKir() {
       pdfApi.state.error != undefined
     ) {
       navigate("/app/kir", { replace: true });
-      alert("Terjadi kesalahan, harap coba beberapa saat lagi");
+      toast.error(pdfApi.state.error.message);
     }
 
     if (
@@ -40,7 +41,7 @@ export function AddKir() {
       kirApi.state.error == undefined
     ) {
       navigate("/app/kir", { replace: true });
-      alert("Data berhasil di simpan");
+      toast.success("Data berhasil di simpan");
     }
 
     if (
@@ -48,7 +49,7 @@ export function AddKir() {
       kirApi.state.status == Status.complete &&
       kirApi.state.error != undefined
     ) {
-      alert("Terjadi kesalahan, harap coba beberapa saat lagi");
+      toast.error(pdfApi.state.error?.message);
     }
   }, [kirApi.state, pdfApi.state]);
 

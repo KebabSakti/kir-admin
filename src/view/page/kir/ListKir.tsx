@@ -5,6 +5,7 @@ import Breadcrumb from "../../component/Breadcrumb";
 import { LoadingContainer } from "../../component/LoadingContainer";
 import PageTitle from "../../component/PageTitle";
 import { useKirApi } from "./KirHook";
+import { toast } from "react-toastify";
 
 export function ListKir() {
   const kirApi = useKirApi();
@@ -20,7 +21,7 @@ export function ListKir() {
       kirApi.state.error == undefined
     ) {
       kirApi.list();
-      alert("Data berhasil dihapus");
+      toast.success("Data berhasil dihapus");
     }
 
     if (
@@ -28,7 +29,8 @@ export function ListKir() {
       kirApi.state.status == Status.complete &&
       kirApi.state.error != undefined
     ) {
-      alert("Terjadi kesalahan, harap coba beberapa saat lagi");
+      kirApi.list();
+      toast.error(kirApi.state.error.message);
     }
   }, [kirApi.state]);
 
@@ -213,6 +215,7 @@ export function ListKir() {
                     }
 
                     if (
+                      kirApi.state.action == "list" &&
                       kirApi.state.status == Status.complete &&
                       kirApi.state.error != undefined
                     ) {

@@ -1,6 +1,7 @@
+import { faker } from "@faker-js/faker";
 import { delay } from "../../common/utility";
 import { Pdf } from "./pdf";
-import { PdfApi, PdfUpdateParam } from "./pdf_api";
+import { PdfApi, PdfCreateParam, PdfUpdateParam } from "./pdf_api";
 
 export class PdfMock implements PdfApi {
   datas: Pdf[] = [
@@ -42,6 +43,21 @@ export class PdfMock implements PdfApi {
     },
   ];
 
+  async create(param: PdfCreateParam): Promise<void> {
+    await delay(1000);
+
+    this.datas.push({
+      ...param,
+      id: faker.string.uuid(),
+      signature:
+        "https://www.pngall.com/wp-content/uploads/14/Signature-PNG-Photos.png",
+      stamp:
+        "https://png.pngtree.com/png-vector/20220614/ourmid/pngtree-vector-completed-stamp-illustration-background-grunge-vector-png-image_13888860.png",
+      created: new Date(),
+      updated: new Date(),
+    });
+  }
+
   async read(id: string): Promise<Pdf | undefined> {
     await delay(1000);
     const pdf = this.datas.find((i) => i.id == id);
@@ -55,6 +71,15 @@ export class PdfMock implements PdfApi {
 
     if (index >= 0) {
       this.datas[index] = { ...param, updated: new Date() };
+    }
+  }
+
+  async remove(id: string): Promise<void> {
+    await delay(1000);
+    const index = this.datas.findIndex((item) => item.id == id);
+
+    if (index >= 0) {
+      this.datas.splice(index, 1);
     }
   }
 

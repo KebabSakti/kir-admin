@@ -7,4 +7,5 @@ export interface Pdf {
   signature?: string | File;
   created?: Date;
   updated?: Date;
+  deleted?: Date;
 }

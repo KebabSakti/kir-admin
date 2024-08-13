@@ -1,6 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Status } from "../../../common/type";
 import Breadcrumb from "../../component/Breadcrumb";
 import { LoadingContainer } from "../../component/LoadingContainer";
@@ -22,7 +23,7 @@ export function AccountPage() {
       authApi.state.error == undefined
     ) {
       authApi.logout();
-      alert("Akun berhasil di update, harap login ulang");
+      toast.success("Akun berhasil di update, harap login ulang");
     }
 
     if (
@@ -30,7 +31,7 @@ export function AccountPage() {
       authApi.state.status == Status.complete &&
       authApi.state.error != undefined
     ) {
-      alert("Terjadi kesalahan, harap coba beberapa saat lagi");
+      toast.error(authApi.state.error.message);
     }
 
     if (
@@ -43,9 +44,9 @@ export function AccountPage() {
 
   return (
     <>
-      <PageTitle title="Akun | Uji Kir App" />
+      <PageTitle title="Edit Akun | Uji Kir App" />
       <div className="mx-auto max-w-270">
-        <Breadcrumb pageName="Akun" />
+        <Breadcrumb pageName="Edit Akun" />
         <Formik
           initialValues={accountUpdateInitialValues}
           validationSchema={accountUpdateFormSchema}

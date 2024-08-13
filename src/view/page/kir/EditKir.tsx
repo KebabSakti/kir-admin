@@ -1,7 +1,9 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Status } from "../../../common/type";
+import { Pdf } from "../../../feature/pdf/pdf";
 import Breadcrumb from "../../component/Breadcrumb";
 import { LoadingContainer } from "../../component/LoadingContainer";
 import PageTitle from "../../component/PageTitle";
@@ -14,7 +16,6 @@ import {
   KirUpload,
 } from "./KirComponent";
 import { useKirApi } from "./KirHook";
-import { Pdf } from "../../../feature/pdf/pdf";
 
 export function EditKir() {
   const { id } = useParams();
@@ -47,7 +48,7 @@ export function EditKir() {
       (kirApi.state.error != undefined || kirApi.state.data == undefined)
     ) {
       navigate("/app/kir", { replace: true });
-      alert("Terjadi kesalahan, harap coba beberapa saat lagi");
+      toast.error(kirApi.state.error?.message);
     }
 
     if (
@@ -56,7 +57,7 @@ export function EditKir() {
       kirApi.state.error == undefined
     ) {
       navigate("/app/kir", { replace: true });
-      alert("Data berhasil di update");
+      toast.success("Data berhasil di update");
     }
 
     if (
@@ -64,7 +65,7 @@ export function EditKir() {
       kirApi.state.status == Status.complete &&
       kirApi.state.error != undefined
     ) {
-      alert("Terjadi kesalahan, harap coba beberapa saat lagi");
+      toast.error(kirApi.state.error.message);
     }
   }
 
@@ -79,7 +80,7 @@ export function EditKir() {
       pdfApi.state.error != undefined
     ) {
       navigate("/app/kir", { replace: true });
-      alert("Terjadi kesalahan, harap coba beberapa saat lagi");
+      toast.error(pdfApi.state.error.message);
     }
   }
 

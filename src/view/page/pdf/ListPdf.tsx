@@ -5,6 +5,7 @@ import Breadcrumb from "../../component/Breadcrumb";
 import { LoadingContainer } from "../../component/LoadingContainer";
 import PageTitle from "../../component/PageTitle";
 import { usePdfApi } from "./PdfHook";
+import { toast } from "react-toastify";
 
 export function ListPdf() {
   const pdfApi = usePdfApi();
@@ -12,6 +13,24 @@ export function ListPdf() {
   useEffect(() => {
     if (pdfApi.state.status == Status.idle && pdfApi.state.data == undefined) {
       pdfApi.list();
+    }
+
+    if (
+      pdfApi.state.action == "remove" &&
+      pdfApi.state.status == Status.complete &&
+      pdfApi.state.error == undefined
+    ) {
+      pdfApi.list();
+      toast.success("Data berhasil di hapus");
+    }
+
+    if (
+      pdfApi.state.action == "remove" &&
+      pdfApi.state.status == Status.complete &&
+      pdfApi.state.error != undefined
+    ) {
+      pdfApi.list();
+      toast.error(pdfApi.state.error.message);
     }
   }, [pdfApi.state]);
 
@@ -23,6 +42,26 @@ export function ListPdf() {
         <div className="rounded-sm border border-stroke bg-white p-7 shadow-default overflow-x-scroll dark:border-strokedark dark:bg-boxdark">
           <LoadingContainer loading={false}>
             <div className="flex flex-col gap-4">
+              <Link
+                to="/app/setting/add"
+                className="bg-primary w-fit text-white p-2 rounded h-10 flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6 stroke-white stroke-2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+                <div>Baru</div>
+              </Link>
               <table className="w-full">
                 <thead>
                   <tr>
@@ -100,6 +139,21 @@ export function ListPdf() {
                                       >
                                         Edit
                                       </Link>
+                                      <button
+                                        type="button"
+                                        className="p-2 bg-red-500 text-white rounded text-xs font-semibold"
+                                        onClick={() => {
+                                          if (
+                                            confirm(
+                                              "Data akan dihapus, proses ini tidak dapat dikembalikan. Anda yakin?"
+                                            )
+                                          ) {
+                                            pdfApi.remove(item.id!);
+                                          }
+                                        }}
+                                      >
+                                        Hapus
+                                      </button>
                                     </div>
                                   </td>
                                 </tr>
@@ -122,6 +176,7 @@ export function ListPdf() {
                     }
 
                     if (
+                      pdfApi.state.action == "list" &&
                       pdfApi.state.status == Status.complete &&
                       pdfApi.state.error != undefined
                     ) {

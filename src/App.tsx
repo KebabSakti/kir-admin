@@ -4,6 +4,7 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
+import { Flip, ToastContainer } from "react-toastify";
 import Layout from "./view/component/Layout";
 import { ErrorPage } from "./view/page/ErrorPage";
 import { Middleware } from "./view/page/Middleware";
@@ -13,6 +14,7 @@ import { RecoveryPage } from "./view/page/auth/RecoveryPage";
 import { AddKir } from "./view/page/kir/AddKir";
 import { EditKir } from "./view/page/kir/EditKir";
 import { ListKir } from "./view/page/kir/ListKir";
+import { AddPdf } from "./view/page/pdf/AddPdf";
 import { EditPdf } from "./view/page/pdf/EditPdf";
 import { ListPdf } from "./view/page/pdf/ListPdf";
 
@@ -63,6 +65,10 @@ const router = createBrowserRouter([
         element: <ListPdf />,
       },
       {
+        path: "/app/setting/add",
+        element: <AddPdf />,
+      },
+      {
         path: "/app/setting/:id/edit",
         element: <EditPdf />,
       },
@@ -75,6 +81,18 @@ export function App() {
 
   return (
     <Context.Provider value={dependencies}>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable={false}
+        pauseOnHover
+        theme="light"
+        transition={Flip}
+      />
       <RouterProvider router={router} />
     </Context.Provider>
   );

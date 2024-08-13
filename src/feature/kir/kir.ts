@@ -10,7 +10,7 @@ export interface Kir {
   address?: string;
   cardNumber?: string;
   rfid?: string;
-  registrationDate?: Date;
+  registrationDate?: string;
   registrationNumber?: string;
   chasisNumber?: string;
   engineNumber?: string;
@@ -55,7 +55,6 @@ export interface Kir {
   hcEmision?: string;
   smokeDensity?: string;
   inspectionResult?: string;
-  expiryDate?: Date;
   inspector?: string;
   inspectorLevel?: string;
   inspectorNumber?: string;
@@ -70,6 +69,7 @@ export interface Kir {
   agencyStamp?: string;
   agencySignature?: string;
   qr?: string;
+  expiryDate?: Date;
   created?: Date;
   updated?: Date;
   deleted?: Date;
