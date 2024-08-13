@@ -6,7 +6,6 @@ export class PdfMock implements PdfApi {
   datas: Pdf[] = [
     {
       id: "1",
-      title: "Direktur",
       name: "Ir. Danto Restyawan,MT",
       level: "Pembina Utama Madya - IV/d",
       number: "NIP 19640829 199403 1 003",
@@ -19,7 +18,6 @@ export class PdfMock implements PdfApi {
     },
     {
       id: "2",
-      title: "Petugas",
       name: "TRI ADWIN CAHYONO,A.Ma.PKB",
       level: "Penguji Tingkat Tiga",
       number: "NRP 065.071.PT3.01.002",
@@ -32,7 +30,6 @@ export class PdfMock implements PdfApi {
     },
     {
       id: "3",
-      title: "Pelaksana",
       name: "AHMADY BURHAN.S.STI,M.H",
       level: "Pembina Tingkat I-IV/b",
       number: "NIP 19800906 200012 1 001",

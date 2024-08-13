@@ -5,15 +5,35 @@ import { Status } from "../../../common/type";
 import Breadcrumb from "../../component/Breadcrumb";
 import { LoadingContainer } from "../../component/LoadingContainer";
 import PageTitle from "../../component/PageTitle";
+import { usePdfApi } from "../pdf/PdfHook";
 import { addKirInitialValues, addKirValidationSchema } from "./kir_form";
-import { KirField, KirSection, KirUpload } from "./KirComponent";
+import {
+  KirField,
+  KirFieldSelect,
+  KirSection,
+  KirUpload,
+} from "./KirComponent";
 import { useKirApi } from "./KirHook";
+import { Pdf } from "../../../feature/pdf/pdf";
 
 export function AddKir() {
   const kirApi = useKirApi();
+  const pdfApi = usePdfApi();
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (pdfApi.state.status == Status.idle && pdfApi.state.data == undefined) {
+      pdfApi.list();
+    }
+
+    if (
+      pdfApi.state.status == Status.complete &&
+      pdfApi.state.error != undefined
+    ) {
+      navigate("/app/kir", { replace: true });
+      alert("Terjadi kesalahan, harap coba beberapa saat lagi");
+    }
+
     if (
       kirApi.state.action == "create" &&
       kirApi.state.status == Status.complete &&
@@ -30,14 +50,19 @@ export function AddKir() {
     ) {
       alert("Terjadi kesalahan, harap coba beberapa saat lagi");
     }
-  }, [kirApi.state]);
+  }, [kirApi.state, pdfApi.state]);
 
   return (
     <>
       <PageTitle title="Tambah Data Kir | Uji Kir App" />
       <div className="mx-auto max-w-270">
         <Breadcrumb pageName="Tambah Data Kir" />
-        <LoadingContainer loading={kirApi.state.status === Status.loading}>
+        <LoadingContainer
+          loading={
+            kirApi.state.status == Status.loading ||
+            pdfApi.state.status == Status.loading
+          }
+        >
           <Formik
             initialValues={addKirInitialValues}
             validationSchema={addKirValidationSchema}
@@ -45,7 +70,7 @@ export function AddKir() {
               kirApi.create(values);
             }}
           >
-            {({ setFieldValue }) => {
+            {({ setFieldValue, setValues, values }) => {
               return (
                 <Form action="#">
                   <div className="flex flex-col gap-2">
@@ -79,14 +104,51 @@ export function AddKir() {
 
                     <KirSection
                       param={{
+                        title: "IDENTITAS BLUe",
+                        subtitle: "BLUe Identity",
+                      }}
+                    >
+                      <KirField
+                        param={{
+                          title: "Nomor Kartu",
+                          subtitle: "Card Number",
+                          type: "text",
+                          as: "input",
+                          name: "cardNumber",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                      <KirField
+                        param={{
+                          title: "Nomor RFID",
+                          subtitle: "RFID Number",
+                          type: "text",
+                          as: "input",
+                          name: "rfid",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                    </KirSection>
+
+                    <KirSection
+                      param={{
                         title: "IDENTITAS KENDARAAN BERMOTOR",
                         subtitle: "VEHICLE IDENTIFICATION",
                       }}
                     >
                       <KirField
                         param={{
-                          title:
-                            "Nomor dan tanggal sertifikat registrasi uji tipe",
+                          title: "Nomor uji kendaraan",
+                          subtitle: "Vehicle inspection number",
+                          type: "text",
+                          as: "input",
+                          name: "inspectionNumber",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                      <KirField
+                        param={{
+                          title: "Nomor dan tanggal SRUT",
                           subtitle:
                             "Number and date of vehicle type approved registration certificate",
                           type: "text",
@@ -122,16 +184,6 @@ export function AddKir() {
                           type: "text",
                           as: "input",
                           name: "engineNumber",
-                          placeholder: "Ketik di sini",
-                        }}
-                      />
-                      <KirField
-                        param={{
-                          title: "Nomor uji kendaraan",
-                          subtitle: "Vehicle inspection number",
-                          type: "text",
-                          as: "input",
-                          name: "inspectionNumber",
                           placeholder: "Ketik di sini",
                         }}
                       />
@@ -181,13 +233,13 @@ export function AddKir() {
 
                     <KirSection
                       param={{
-                        title: "SPESIFIKASI TEKNIS KENDARAAN",
+                        title: "SPESIFIKASI TEKNIS KENDARAAN BERMOTOR",
                         subtitle: "VEHICLE TECHNICAL SPESIFICATIONS",
                       }}
                     >
                       <KirField
                         param={{
-                          title: "Jenis",
+                          title: "Jenis Kendaraan",
                           subtitle: "Purpose of vehicle",
                           type: "text",
                           as: "input",
@@ -197,7 +249,7 @@ export function AddKir() {
                       />
                       <KirField
                         param={{
-                          title: "Merk/tipe",
+                          title: "Merk/tipe Kendaraan",
                           subtitle: "Brand/type",
                           type: "text",
                           as: "input",
@@ -330,7 +382,7 @@ export function AddKir() {
                         }}
                       />
                       <div className="text-[16px] font-semibold text-black dark:text-white">
-                        Jarak sumbu (Wheel base)
+                        Jarak sumbu
                       </div>
                       <KirField
                         param={{
@@ -362,9 +414,12 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
+                      <div className="text-[16px] font-semibold text-black dark:text-white">
+                        Dimensi bak muatan/tangki
+                      </div>
                       <KirField
                         param={{
-                          title: "Dimensi bak muatan/tangki",
+                          title: "Panjang x Lebar x Tinggi",
                           subtitle: "",
                           type: "text",
                           as: "input",
@@ -372,9 +427,6 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
-                      <div className="text-[16px] font-semibold text-black dark:text-white">
-                        Dimension of cargo tub (length x width x height)
-                      </div>
                       <KirField
                         param={{
                           title: "JBB/JBKB",
@@ -415,9 +467,324 @@ export function AddKir() {
                           placeholder: "Ketik di sini",
                         }}
                       />
+                      <KirField
+                        param={{
+                          title: "MST",
+                          subtitle: "",
+                          type: "text",
+                          as: "input",
+                          name: "mst",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
                     </KirSection>
 
-                    <div className="col-span-5 xl:col-span-3">
+                    <KirSection
+                      param={{
+                        title: "RINCIAN HASIL UJI",
+                        subtitle: "",
+                      }}
+                    >
+                      <div className="text-[16px] font-semibold text-black dark:text-white">
+                        Hasil Uji Rem
+                      </div>
+                      <KirField
+                        param={{
+                          title: "Rem Utama",
+                          subtitle: "",
+                          type: "text",
+                          as: "input",
+                          name: "brake1",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                      <KirField
+                        param={{
+                          title: "Rem Utama Sumbu I",
+                          subtitle: "",
+                          type: "text",
+                          as: "input",
+                          name: "brake2",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                      <KirField
+                        param={{
+                          title: "Rem Utama Sumbu II",
+                          subtitle: "",
+                          type: "text",
+                          as: "input",
+                          name: "brake3",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                      <KirField
+                        param={{
+                          title: "Rem Utama Sumbu III",
+                          subtitle: "",
+                          type: "text",
+                          as: "input",
+                          name: "brake4",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                      <KirField
+                        param={{
+                          title: "Rem Utama Sumbu IV",
+                          subtitle: "",
+                          type: "text",
+                          as: "input",
+                          name: "brake5",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                      <div className="text-[16px] font-semibold text-black dark:text-white">
+                        Hasil Uji Lampu
+                      </div>
+                      <KirField
+                        param={{
+                          title: "Lampu Utama Kanan",
+                          subtitle: "",
+                          type: "text",
+                          as: "input",
+                          name: "headLamp1",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                      <KirField
+                        param={{
+                          title: "Lampu Utama Kiri",
+                          subtitle: "",
+                          type: "text",
+                          as: "input",
+                          name: "headLamp2",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                      <KirField
+                        param={{
+                          title: "Lampu Utama Penyimpangan Kanan",
+                          subtitle: "",
+                          type: "text",
+                          as: "input",
+                          name: "headLamp3",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                      <KirField
+                        param={{
+                          title: "Lampu Utama Penyimpangan Kiri",
+                          subtitle: "",
+                          type: "text",
+                          as: "input",
+                          name: "headLamp4",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                      <div className="text-[16px] font-semibold text-black dark:text-white">
+                        Hasil Uji Emisi
+                      </div>
+                      <KirField
+                        param={{
+                          title: "Emisi CO",
+                          subtitle: "",
+                          type: "text",
+                          as: "input",
+                          name: "coEmision",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                      <KirField
+                        param={{
+                          title: "Emisi HC",
+                          subtitle: "",
+                          type: "text",
+                          as: "input",
+                          name: "hcEmision",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                      <KirField
+                        param={{
+                          title: "Ketebalan Asap",
+                          subtitle: "",
+                          type: "text",
+                          as: "input",
+                          name: "smokeDensity",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                    </KirSection>
+
+                    <KirSection
+                      param={{ title: "KETERANGAN HASIL UJI", subtitle: "" }}
+                    >
+                      <div className="flex gap-5 items-center justify-center">
+                        <div className="flex flex-col w-96">
+                          <div className="text-[16px] text-black dark:text-white">
+                            HASIL UJI
+                          </div>
+                        </div>
+                        <div className="w-full">
+                          <Field
+                            className="w-full rounded border border-stroke bg-gray p-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            as="select"
+                            name="inspectionResult"
+                          >
+                            <option value="">Pilih salah satu</option>
+                            <option value="LULUS">LULUS</option>
+                            <option value="TIDAK LULUS">TIDAK LULUS</option>
+                          </Field>
+                          <ErrorMessage
+                            name="inspectionResult"
+                            component="div"
+                            className="text-red-500 text-xs"
+                          />
+                        </div>
+                      </div>
+                      <div className="text-[16px] font-semibold text-black dark:text-white">
+                        Asal Kendaraan Wajib Uji
+                      </div>
+                      <KirField
+                        param={{
+                          title: "Wilayah",
+                          subtitle: "",
+                          type: "text",
+                          as: "input",
+                          name: "region",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                      <KirField
+                        param={{
+                          title: "Wilayah Asal",
+                          subtitle: "",
+                          type: "text",
+                          as: "input",
+                          name: "origin",
+                          placeholder: "Ketik di sini",
+                        }}
+                      />
+                    </KirSection>
+
+                    <KirSection
+                      param={{
+                        title: "STEMPEL DAN TANDA TANGAN",
+                        subtitle: "",
+                      }}
+                    >
+                      <KirFieldSelect
+                        title="Direktur jendral perhubungan darat"
+                        name="director"
+                        onChange={(e: any) => {
+                          const pdf = (pdfApi.state.data as Array<Pdf>).find(
+                            (i) => i.name == e.target.value
+                          );
+
+                          setValues({
+                            ...values,
+                            director: pdf?.name ?? "",
+                            directorLevel: pdf?.level ?? "",
+                            directorNumber: pdf?.number ?? "",
+                            directorStamp: pdf?.stamp ?? "",
+                            directorSignature: pdf?.signature ?? "",
+                          });
+                        }}
+                      >
+                        <option value="">Pilih salah satu</option>
+                        {(() => {
+                          if (
+                            pdfApi.state.status == Status.complete &&
+                            pdfApi.state.data instanceof Array
+                          ) {
+                            return (
+                              <>
+                                {pdfApi.state.data.map((item) => (
+                                  <option key={item.id} value={item.name}>
+                                    {item.name}
+                                  </option>
+                                ))}
+                              </>
+                            );
+                          }
+                        })()}
+                      </KirFieldSelect>
+                      <KirFieldSelect
+                        title="Nama petugas penguji"
+                        name="inspector"
+                        onChange={(e: any) => {
+                          const pdf = (pdfApi.state.data as Array<Pdf>).find(
+                            (i) => i.name == e.target.value
+                          );
+
+                          setValues({
+                            ...values,
+                            inspector: pdf?.name ?? "",
+                            inspectorLevel: pdf?.level ?? "",
+                            inspectorNumber: pdf?.number ?? "",
+                            inspectorStamp: pdf?.stamp ?? "",
+                            inspectorSignature: pdf?.signature ?? "",
+                          });
+                        }}
+                      >
+                        <option value="">Pilih salah satu</option>
+                        {(() => {
+                          if (
+                            pdfApi.state.status == Status.complete &&
+                            pdfApi.state.data instanceof Array
+                          ) {
+                            return (
+                              <>
+                                {pdfApi.state.data.map((item) => (
+                                  <option key={item.id} value={item.name}>
+                                    {item.name}
+                                  </option>
+                                ))}
+                              </>
+                            );
+                          }
+                        })()}
+                      </KirFieldSelect>
+
+                      <KirFieldSelect
+                        title="Nama kepala dinas"
+                        name="agency"
+                        onChange={(e: any) => {
+                          const pdf = (pdfApi.state.data as Array<Pdf>).find(
+                            (i) => i.name == e.target.value
+                          );
+
+                          setValues({
+                            ...values,
+                            agency: pdf?.name ?? "",
+                            agencyLevel: pdf?.level ?? "",
+                            agencyNumber: pdf?.number ?? "",
+                            agencyStamp: pdf?.stamp ?? "",
+                            agencySignature: pdf?.signature ?? "",
+                          });
+                        }}
+                      >
+                        <option value="">Pilih salah satu</option>
+                        {(() => {
+                          if (
+                            pdfApi.state.status == Status.complete &&
+                            pdfApi.state.data instanceof Array
+                          ) {
+                            return (
+                              <>
+                                {pdfApi.state.data.map((item) => (
+                                  <option key={item.id} value={item.name}>
+                                    {item.name}
+                                  </option>
+                                ))}
+                              </>
+                            );
+                          }
+                        })()}
+                      </KirFieldSelect>
+                    </KirSection>
+
+                    {/* <div className="col-span-5 xl:col-span-3">
                       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                         <div className="p-7">
                           <table className="w-full table-fixed">
@@ -722,7 +1089,7 @@ export function AddKir() {
                           </table>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
 
                     <div>
                       <button

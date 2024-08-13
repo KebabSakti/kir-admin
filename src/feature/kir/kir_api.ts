@@ -1,11 +1,6 @@
 import { Kir } from "./kir";
 
-export interface KirCreateParam extends Kir {
-  frontPicFile?: File;
-  backPicFile?: File;
-  rightPicFile?: File;
-  leftPicFile?: File;
-}
+export type KirCreateParam = Kir;
 
 export type KirUpdateParam = Kir;
 

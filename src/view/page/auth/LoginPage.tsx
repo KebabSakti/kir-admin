@@ -33,7 +33,7 @@ export function LoginPage() {
   return (
     <>
       <PageTitle title="Sign In | Uji Kir App" />
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="flex justify-center items-center min-h-screen bg-gray dark:bg-black">
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
           <LoadingContainer loading={authApi.state.status == Status.loading}>
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">

@@ -39,9 +39,9 @@ export function KirSection({
             <div className="font-medium text-black dark:text-white">
               {param.title}
             </div>
-            <div className="font-medium text-xs italic text-graydark dark:text-white">
+            {/* <div className="font-medium text-xs italic text-graydark dark:text-white">
               {param.subtitle}
-            </div>
+            </div> */}
           </div>
           <div className="p-7">
             <div className="flex flex-col gap-5">{children}</div>
@@ -66,9 +66,9 @@ export function KirField({
           <div className="text-[16px] text-black dark:text-white">
             {param.title}
           </div>
-          <div className="text-[12px] italic text-graydark dark:text-white">
+          {/* <div className="text-[12px] italic text-graydark dark:text-white">
             {param.subtitle}
-          </div>
+          </div> */}
         </div>
         <div className="w-full">
           <Field
@@ -82,6 +82,35 @@ export function KirField({
           </Field>
           <ErrorMessage
             name={param.name}
+            component="div"
+            className="text-red-500 text-xs"
+          />
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function KirFieldSelect({ ...props }) {
+  return (
+    <>
+      <div className="flex gap-5 items-center justify-center">
+        <div className="flex flex-col w-96">
+          <div className="text-[16px] text-black dark:text-white">
+            {props.title}
+          </div>
+        </div>
+        <div className="w-full">
+          <Field
+            className="w-full rounded border border-stroke bg-gray p-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+            as="select"
+            name={props.name}
+            onChange={props.onChange}
+          >
+            {props.children}
+          </Field>
+          <ErrorMessage
+            name={props.name}
             component="div"
             className="text-red-500 text-xs"
           />

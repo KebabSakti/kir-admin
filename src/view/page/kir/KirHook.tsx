@@ -20,6 +20,7 @@ export type KirApiType = {
 
 export function useKirApi(): KirApiType {
   const [state, setState] = useState<State<Kir>>({
+    action: "idle",
     status: Status.idle,
   });
 

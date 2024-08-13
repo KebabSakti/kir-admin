@@ -27,9 +27,6 @@ export function ListPdf() {
                 <thead>
                   <tr>
                     <th className="font-semibold text-sm text-start p-2 bg-gray text-black dark:text-white dark:bg-graydark">
-                      Judul
-                    </th>
-                    <th className="font-semibold text-sm text-start p-2 bg-gray text-black dark:text-white dark:bg-graydark">
                       Nama
                     </th>
                     <th className="font-semibold text-sm text-start p-2 bg-gray text-black dark:text-white dark:bg-graydark">
@@ -64,9 +61,6 @@ export function ListPdf() {
                                   key={item.id}
                                   className="odd:bg-slate-50 odd:dark:bg-form-strokedark even:bg-slate-100 even:dark:bg-graydark hover:bg-slate-200 hover:dark:bg-slate-800"
                                 >
-                                  <td className="text-sm text-start p-2 text-black dark:text-white">
-                                    {item.title}
-                                  </td>
                                   <td className="text-sm text-start p-2 text-black dark:text-white">
                                     {item.name}
                                   </td>

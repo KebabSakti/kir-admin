@@ -13,6 +13,7 @@ export type PdfApiType = {
 
 export function usePdfApi(): PdfApiType {
   const [state, setState] = useState<State<Pdf>>({
+    action: "idle",
     status: Status.idle,
   });
 

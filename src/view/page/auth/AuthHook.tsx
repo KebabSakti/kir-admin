@@ -17,11 +17,12 @@ export type AuthApiType = {
 
 export function useAuthApi(): AuthApiType {
   const [state, setState] = useState<State<string>>({
+    action: "idle",
     status: Status.idle,
   });
 
   function init() {
-    setState({ status: Status.loading });
+    setState({ status: Status.loading, action: "init" });
     const token = localStorage.getItem("token") ?? undefined;
 
     setState({

@@ -8,6 +8,8 @@ export interface Kir {
   directorSignature?: string;
   owner?: string;
   address?: string;
+  cardNumber?: string;
+  rfid?: string;
   registrationDate?: Date;
   registrationNumber?: string;
   chasisNumber?: string;
@@ -39,6 +41,7 @@ export interface Kir {
   jbiJbki?: string;
   payload?: string;
   classPermit?: string;
+  mst?: string;
   brake1?: string;
   brake2?: string;
   brake3?: string;
@@ -48,6 +51,9 @@ export interface Kir {
   headLamp2?: string;
   headLamp3?: string;
   headLamp4?: string;
+  coEmision?: string;
+  hcEmision?: string;
+  smokeDensity?: string;
   inspectionResult?: string;
   expiryDate?: Date;
   inspector?: string;
@@ -55,6 +61,9 @@ export interface Kir {
   inspectorNumber?: string;
   inspectorStamp?: string;
   inspectorSignature?: string;
+  inspectionUnit?: string;
+  region?: string;
+  origin?: string;
   agency?: string;
   agencyLevel?: string;
   agencyNumber?: string;
