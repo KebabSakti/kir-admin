@@ -8,7 +8,6 @@ import {
   KirListParam,
   KirUpdateParam,
 } from "./kir_api";
-import { InternalFailure } from "../../common/error";
 
 export class KirMock implements KirApi {
   datas: Kir[] = [];
