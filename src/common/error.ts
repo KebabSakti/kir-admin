@@ -33,3 +33,21 @@ export class InternalFailure extends Error {
     this.message = message;
   }
 }
+
+export function Failure(code: number, message: string): Error {
+  let error = new InternalFailure(message);
+
+  if (code == 401) {
+    error = new Unauthorized(message);
+  }
+
+  if (code == 400) {
+    error = new BadRequest(message);
+  }
+
+  if (code == 404) {
+    error = new NotFound(message);
+  }
+
+  return error;
+}

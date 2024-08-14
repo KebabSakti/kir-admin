@@ -14,3 +14,16 @@ export interface State<T> {
 export interface ComponentProp<T> {
   prop?: T;
 }
+
+export type Payload = {
+  token?: string;
+  pagination?: {
+    cursor: number;
+    take: number;
+  };
+};
+
+export type RequestResult<T> = {
+  message?: string;
+  data?: T | Array<T> | undefined;
+};

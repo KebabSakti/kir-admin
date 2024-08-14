@@ -17,8 +17,11 @@ import { ListKir } from "./view/page/kir/ListKir";
 import { AddPdf } from "./view/page/pdf/AddPdf";
 import { EditPdf } from "./view/page/pdf/EditPdf";
 import { ListPdf } from "./view/page/pdf/ListPdf";
+import { AuthApiType, useAuthApi } from "./view/page/auth/AuthHook";
 
-type Dependencies = {};
+type Dependencies = {
+  authApi: AuthApiType;
+};
 
 export const Context = createContext<Dependencies | undefined>(undefined);
 
@@ -77,7 +80,9 @@ const router = createBrowserRouter([
 ]);
 
 export function App() {
-  const dependencies: Dependencies = {};
+  const dependencies: Dependencies = {
+    authApi: useAuthApi(),
+  };
 
   return (
     <Context.Provider value={dependencies}>

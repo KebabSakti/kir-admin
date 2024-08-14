@@ -32,6 +32,8 @@ export function ListKir() {
       kirApi.list();
       toast.error(kirApi.state.error.message);
     }
+
+    console.log(kirApi.state);
   }, [kirApi.state]);
 
   return (
@@ -159,10 +161,10 @@ export function ListKir() {
                                     {item.inspectionResult}
                                   </td>
                                   <td className="text-sm text-start p-2 text-black dark:text-white">
-                                    {item.created?.toDateString()}
+                                    {item.created?.toString()}
                                   </td>
                                   <td className="text-sm text-start p-2 text-black dark:text-white">
-                                    {item.created?.toDateString()}
+                                    {item.created?.toString()}
                                   </td>
                                   <td className="p-2">
                                     <div className="flex gap-1">
