@@ -7,8 +7,6 @@ export type KirUpdateParam = Kir;
 
 export type KirListParam = {
   certificateNumber?: string;
-  owner?: string;
-  chasisNumber?: string;
 };
 
 export abstract class KirApi {

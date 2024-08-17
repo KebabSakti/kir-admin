@@ -1,18 +1,29 @@
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Context } from "../../../App";
 import { Status } from "../../../common/type";
 import Breadcrumb from "../../component/Breadcrumb";
 import { LoadingContainer } from "../../component/LoadingContainer";
 import PageTitle from "../../component/PageTitle";
 import { useKirApi } from "./KirHook";
-import { toast } from "react-toastify";
 
 export function ListKir() {
+  const { authApi } = useContext(Context)!;
   const kirApi = useKirApi();
+  const [param, setParam] = useState({ certificateNumber: "" });
+
+  const [payload, setPayload] = useState({
+    token: authApi.state.data?.toString(),
+    pagination: {
+      skip: 0,
+      take: 10,
+    },
+  });
 
   useEffect(() => {
     if (kirApi.state.status == Status.idle && kirApi.state.data == undefined) {
-      kirApi.list();
+      kirApi.list(param, payload);
     }
 
     if (
@@ -20,7 +31,7 @@ export function ListKir() {
       kirApi.state.status == Status.complete &&
       kirApi.state.error == undefined
     ) {
-      kirApi.list();
+      kirApi.list(param, payload);
       toast.success("Data berhasil dihapus");
     }
 
@@ -29,11 +40,9 @@ export function ListKir() {
       kirApi.state.status == Status.complete &&
       kirApi.state.error != undefined
     ) {
-      kirApi.list();
+      kirApi.list(param, payload);
       toast.error(kirApi.state.error.message);
     }
-
-    console.log(kirApi.state);
   }, [kirApi.state]);
 
   return (
@@ -70,9 +79,37 @@ export function ListKir() {
                     type="text"
                     placeholder="Nomor Sertifikat"
                     className="w-fit h-10 rounded border border-stroke bg-gray p-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                    onChange={(e) => {
+                      const updatedParam = {
+                        ...param,
+                        certificateNumber: e.target.value,
+                      };
+
+                      kirApi.list(updatedParam, payload);
+                      setParam(updatedParam);
+                    }}
                   />
                   <div className="flex gap-1 items-center">
-                    <button className="bg-blue-500 h-10 p-2 rounded">
+                    <button
+                      className="bg-blue-500 h-10 p-2 rounded"
+                      onClick={() => {
+                        //prev
+                        const updatedPayload = {
+                          ...payload,
+                          pagination: {
+                            ...payload.pagination,
+                            skip:
+                              payload.pagination?.skip! >= 10
+                                ? payload.pagination?.skip! -
+                                  payload.pagination?.take!
+                                : 0,
+                          },
+                        };
+
+                        kirApi.list(param, updatedPayload);
+                        setPayload(updatedPayload);
+                      }}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -88,7 +125,24 @@ export function ListKir() {
                         />
                       </svg>
                     </button>
-                    <button className="bg-blue-500 h-10 p-2 rounded">
+                    <button
+                      className="bg-blue-500 h-10 p-2 rounded"
+                      onClick={() => {
+                        // next
+                        const updatedPayload = {
+                          ...payload,
+                          pagination: {
+                            ...payload.pagination,
+                            skip:
+                              payload.pagination?.skip! +
+                              payload.pagination?.take,
+                          },
+                        };
+
+                        kirApi.list(param, updatedPayload);
+                        setPayload(updatedPayload);
+                      }}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"

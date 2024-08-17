@@ -1,14 +1,17 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Context } from "../../App";
 import { Status } from "../../common/type";
-import { useAuthApi } from "./auth/AuthHook";
 
 export function Middleware({ children }: { children: ReactNode }) {
-  const authApi = useAuthApi();
+  const { authApi } = useContext(Context)!;
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (authApi.state.status == Status.idle) {
+    if (
+      authApi.state.status == Status.idle &&
+      authApi.state.data == undefined
+    ) {
       authApi.init();
     }
 
@@ -18,6 +21,7 @@ export function Middleware({ children }: { children: ReactNode }) {
     ) {
       navigate("/", { replace: true });
     }
+
   }, [authApi.state]);
 
   return (

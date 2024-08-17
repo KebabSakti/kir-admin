@@ -1,22 +1,23 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Context } from "../../../App";
 import { Status } from "../../../common/type";
 import { LoadingContainer } from "../../component/LoadingContainer";
 import PageTitle from "../../component/PageTitle";
 import { loginFormSchema } from "./auth_form";
-import { useAuthApi } from "./AuthHook";
+import logo from "../../../assets/image/logo.png";
+import { toast } from "react-toastify";
 
 export function LoginPage() {
-  const authApi = useAuthApi();
+  const { authApi } = useContext(Context)!;
   const navigate = useNavigate();
 
   useEffect(() => {
     if (
       authApi.state.action == "login" &&
       authApi.state.status == Status.complete &&
-      authApi.state.data != undefined &&
-      authApi.state.error == undefined
+      authApi.state.data != undefined
     ) {
       navigate("/app/kir/add", { replace: true });
     }
@@ -26,7 +27,7 @@ export function LoginPage() {
       authApi.state.status == Status.complete &&
       authApi.state.error != undefined
     ) {
-      alert("Terjadi kesalahan, harap coba beberapa saat lagi");
+      toast.error(authApi.state.error.message);
     }
   }, [authApi.state]);
 
@@ -37,6 +38,9 @@ export function LoginPage() {
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
           <LoadingContainer loading={authApi.state.status == Status.loading}>
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
+              <div className="flex items-center justify-center pb-6">
+                <img src={logo} className="w-20" />
+              </div>
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
                 Sign In to continue
               </h2>
@@ -144,21 +148,6 @@ export function LoginPage() {
                       </Link>
                     </p>
                   </div>
-                  {(() => {
-                    if (
-                      authApi.state.status == Status.complete &&
-                      authApi.state.error != undefined
-                    ) {
-                      return (
-                        <div className="flex flex-col justify-center items-center gap-1 p-4 mt-6 rounded-lg bg-red-50 border border-red-100">
-                          <div>Error encountered</div>
-                          <div className=" text-red-500">
-                            {authApi.state.error.message}
-                          </div>
-                        </div>
-                      );
-                    }
-                  })()}
                 </Form>
               </Formik>
             </div>

@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { Context } from "../../App";
 import Logo from "../../assets/image/logo.png";
 import SidebarLinkGroup from "./SidebarLinkGroup";
-import { useAuthApi } from "../page/auth/AuthHook";
-import { Status } from "../../common/type";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -14,8 +13,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const location = useLocation();
   const { pathname } = location;
 
-  const authApi = useAuthApi();
-  const navigate = useNavigate();
+  const { authApi } = useContext(Context)!;
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
@@ -59,15 +57,6 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       document.querySelector("body")?.classList.remove("sidebar-expanded");
     }
   }, [sidebarExpanded]);
-
-  useEffect(() => {
-    if (
-      authApi.state.status == Status.complete &&
-      authApi.state.data == undefined
-    ) {
-      navigate("/", { replace: true });
-    }
-  }, [authApi.state]);
 
   return (
     <aside

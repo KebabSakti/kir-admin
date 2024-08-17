@@ -23,7 +23,7 @@ export function useAuthApi(): AuthApiType {
 
   function init() {
     setState({ status: Status.loading, action: "init" });
-    const token = localStorage.getItem("token") ?? undefined;
+    const token = authApi.init();
 
     setState({
       status: Status.complete,

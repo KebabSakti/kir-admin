@@ -1,19 +1,14 @@
 import { Failure } from "../../common/error";
 import { Axios } from "../../common/instance";
 import { Payload } from "../../common/type";
-import { Kir } from "./kir";
-import {
-  KirApi,
-  KirCreateParam,
-  KirListParam,
-  KirUpdateParam,
-} from "./kir_api";
+import { Pdf } from "./pdf";
+import { PdfApi, PdfCreateParam, PdfUpdateParam } from "./pdf_api";
 
-export class KirRemote implements KirApi {
-  async create(param: KirCreateParam, payload?: Payload): Promise<void> {
+export class PdfRemote implements PdfApi {
+  async create(param: PdfCreateParam, payload?: Payload): Promise<void> {
     try {
       await Axios({
-        url: "/admin/kir",
+        url: "/admin/pdf",
         method: "post",
         data: param,
         headers: {
@@ -25,10 +20,10 @@ export class KirRemote implements KirApi {
     }
   }
 
-  async read(id: string, payload?: Payload): Promise<Kir | undefined> {
+  async read(id: string, payload?: Payload): Promise<Pdf | undefined> {
     try {
       const response = await Axios({
-        url: `/admin/kir/${id}/read`,
+        url: `/admin/pdf/${id}/read`,
         method: "get",
         headers: {
           Authorization: `Bearer ${payload?.token}`,
@@ -41,10 +36,10 @@ export class KirRemote implements KirApi {
     }
   }
 
-  async update(param: KirUpdateParam, payload?: Payload): Promise<void> {
+  async update(param: PdfUpdateParam, payload?: Payload): Promise<void> {
     try {
       const response = await Axios({
-        url: `/admin/kir/`,
+        url: `/admin/pdf/`,
         method: "put",
         data: param,
         headers: {
@@ -61,7 +56,7 @@ export class KirRemote implements KirApi {
   async remove(id: string, payload?: Payload): Promise<void> {
     try {
       const response = await Axios({
-        url: `/admin/kir/`,
+        url: `/admin/pdf/`,
         method: "delete",
         data: id,
         headers: {
@@ -75,12 +70,11 @@ export class KirRemote implements KirApi {
     }
   }
 
-  async list(param?: KirListParam, payload?: Payload): Promise<Kir[]> {
+  async list(payload?: Payload): Promise<Pdf[]> {
     try {
       const response = await Axios({
-        url: `/admin/kir/`,
+        url: `/admin/pdf/`,
         method: "get",
-        params: { ...param, pagination: { ...payload?.pagination } },
         headers: {
           Authorization: `Bearer ${payload?.token}`,
         },
@@ -90,9 +84,5 @@ export class KirRemote implements KirApi {
     } catch (error: any) {
       throw Failure(error.response.status, error.response.data);
     }
-  }
-
-  async print(id: string, payload?: Payload): Promise<void> {
-    throw new Error("Method not implemented.");
   }
 }

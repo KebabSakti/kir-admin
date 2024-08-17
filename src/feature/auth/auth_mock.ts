@@ -4,6 +4,9 @@ import { Admin } from "./admin";
 import { AuthAccountUpdateParam, AuthApi, AuthLoginParam } from "./auth_api";
 
 export class AuthMock implements AuthApi {
+  init(): string {
+    throw new Error("Method not implemented.");
+  }
   private user: Admin = {
     id: "admin",
     email: "julian.aryo1989@gmail.com",

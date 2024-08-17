@@ -18,8 +18,8 @@ export interface ComponentProp<T> {
 export type Payload = {
   token?: string;
   pagination?: {
-    cursor: number;
-    take: number;
+    skip?: number;
+    take?: number;
   };
 };
 
