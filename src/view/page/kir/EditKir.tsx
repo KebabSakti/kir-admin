@@ -16,6 +16,7 @@ import {
   KirUpload,
 } from "./KirComponent";
 import { useKirApi } from "./KirHook";
+import { server } from "../../../common/config";
 
 export function EditKir() {
   const { id } = useParams();
@@ -235,7 +236,7 @@ export function EditKir() {
                             title: "Foto Depan",
                             subtitle: "Front Picture",
                             name: "frontPic",
-                            image: values.frontPic,
+                            image: `${server}/${values.frontPic}`,
                             setFieldValue: setFieldValue,
                           }}
                         />
@@ -244,7 +245,7 @@ export function EditKir() {
                             title: "Foto Belakang",
                             subtitle: "Back Picture",
                             name: "backPic",
-                            image: values.backPic,
+                            image: `${server}/${values.backPic}`,
                             setFieldValue: setFieldValue,
                           }}
                         />
@@ -253,7 +254,7 @@ export function EditKir() {
                             title: "Foto Kanan",
                             subtitle: "Right Picture",
                             name: "rightPic",
-                            image: values.rightPic,
+                            image: `${server}/${values.rightPic}`,
                             setFieldValue: setFieldValue,
                           }}
                         />
@@ -262,7 +263,7 @@ export function EditKir() {
                             title: "Foto Kiri",
                             subtitle: "Left Picture",
                             name: "leftPic",
-                            image: values.leftPic,
+                            image: `${server}/${values.leftPic}`,
                             setFieldValue: setFieldValue,
                           }}
                         />

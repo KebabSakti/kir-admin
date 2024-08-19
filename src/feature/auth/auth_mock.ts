@@ -4,7 +4,10 @@ import { Admin } from "./admin";
 import { AuthAccountUpdateParam, AuthApi, AuthLoginParam } from "./auth_api";
 
 export class AuthMock implements AuthApi {
-  init(): string {
+  init(): string | undefined {
+    throw new Error("Method not implemented.");
+  }
+  token(): Promise<string | undefined> {
     throw new Error("Method not implemented.");
   }
   private user: Admin = {

@@ -67,7 +67,6 @@ export const addKirInitialValues: any = {
   agencyNumber: "",
   agencyStamp: "",
   agencySignature: "",
-  stamp: "",
 };
 
 export const addKirValidationSchema = Yup.object({

@@ -1,20 +1,19 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Context } from "../../../App";
 import { Status } from "../../../common/type";
+import { KirListParam } from "../../../feature/kir/kir_api";
 import Breadcrumb from "../../component/Breadcrumb";
 import { LoadingContainer } from "../../component/LoadingContainer";
 import PageTitle from "../../component/PageTitle";
 import { useKirApi } from "./KirHook";
+import dayjs from "dayjs";
+import { server } from "../../../common/config";
 
 export function ListKir() {
-  const { authApi } = useContext(Context)!;
   const kirApi = useKirApi();
-  const [param, setParam] = useState({ certificateNumber: "" });
 
-  const [payload, setPayload] = useState({
-    token: authApi.state.data?.toString(),
+  const [param, setParam] = useState<KirListParam>({
     pagination: {
       skip: 0,
       take: 10,
@@ -23,7 +22,7 @@ export function ListKir() {
 
   useEffect(() => {
     if (kirApi.state.status == Status.idle && kirApi.state.data == undefined) {
-      kirApi.list(param, payload);
+      kirApi.list(param);
     }
 
     if (
@@ -31,7 +30,7 @@ export function ListKir() {
       kirApi.state.status == Status.complete &&
       kirApi.state.error == undefined
     ) {
-      kirApi.list(param, payload);
+      kirApi.list(param);
       toast.success("Data berhasil dihapus");
     }
 
@@ -40,10 +39,14 @@ export function ListKir() {
       kirApi.state.status == Status.complete &&
       kirApi.state.error != undefined
     ) {
-      kirApi.list(param, payload);
+      kirApi.list(param);
       toast.error(kirApi.state.error.message);
     }
   }, [kirApi.state]);
+
+  useEffect(() => {
+    kirApi.list(param);
+  }, [param]);
 
   return (
     <>
@@ -80,34 +83,42 @@ export function ListKir() {
                     placeholder="Nomor Sertifikat"
                     className="w-fit h-10 rounded border border-stroke bg-gray p-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                     onChange={(e) => {
-                      const updatedParam = {
-                        ...param,
-                        certificateNumber: e.target.value,
-                      };
+                      let updatedParam: any = {};
 
-                      kirApi.list(updatedParam, payload);
+                      if (e.target.value.length > 0) {
+                        updatedParam = {
+                          certificateNumber: e.target.value,
+                        };
+                      } else {
+                        updatedParam = {
+                          pagination: {
+                            skip: 0,
+                            take: 10,
+                          },
+                        };
+                      }
+
                       setParam(updatedParam);
                     }}
                   />
                   <div className="flex gap-1 items-center">
                     <button
-                      className="bg-blue-500 h-10 p-2 rounded"
+                      className="bg-blue-500 h-10 p-2 rounded disabled:bg-[#ccc] disabled:dark:bg-[#575757]"
+                      disabled={param.pagination == undefined}
                       onClick={() => {
                         //prev
-                        const updatedPayload = {
-                          ...payload,
+                        const updatedParam = {
                           pagination: {
-                            ...payload.pagination,
+                            ...param.pagination,
                             skip:
-                              payload.pagination?.skip! >= 10
-                                ? payload.pagination?.skip! -
-                                  payload.pagination?.take!
+                              param.pagination?.skip! >= 10
+                                ? param.pagination?.skip! -
+                                  param.pagination?.take!
                                 : 0,
                           },
                         };
 
-                        kirApi.list(param, updatedPayload);
-                        setPayload(updatedPayload);
+                        setParam(updatedParam);
                       }}
                     >
                       <svg
@@ -125,22 +136,25 @@ export function ListKir() {
                         />
                       </svg>
                     </button>
+                    <div className="border border-blue-500 w-10 text-center h-10 p-2 rounded text-black dark:text-white">
+                      {param.pagination?.skip != undefined
+                        ? param.pagination?.skip! / 10 + 1
+                        : 1}
+                    </div>
                     <button
-                      className="bg-blue-500 h-10 p-2 rounded"
+                      className="bg-blue-500 h-10 p-2 rounded disabled:bg-[#ccc] disabled:dark:bg-[#575757]"
+                      disabled={param.pagination == undefined}
                       onClick={() => {
                         // next
-                        const updatedPayload = {
-                          ...payload,
+                        const updatedParam = {
                           pagination: {
-                            ...payload.pagination,
+                            ...param.pagination,
                             skip:
-                              payload.pagination?.skip! +
-                              payload.pagination?.take,
+                              param.pagination?.skip! + param.pagination?.take!,
                           },
                         };
 
-                        kirApi.list(param, updatedPayload);
-                        setPayload(updatedPayload);
+                        setParam(updatedParam);
                       }}
                     >
                       <svg
@@ -215,15 +229,18 @@ export function ListKir() {
                                     {item.inspectionResult}
                                   </td>
                                   <td className="text-sm text-start p-2 text-black dark:text-white">
-                                    {item.created?.toString()}
+                                    {dayjs(item.created!).format("DD/MM/YYYY")}
                                   </td>
                                   <td className="text-sm text-start p-2 text-black dark:text-white">
-                                    {item.created?.toString()}
+                                    {dayjs(item.expiryDate!).format(
+                                      "DD/MM/YYYY"
+                                    )}
                                   </td>
                                   <td className="p-2">
                                     <div className="flex gap-1">
                                       <Link
-                                        to=""
+                                        to={`${server}/certificate/${item.certificateNumber}`}
+                                        target="_blank"
                                         className="p-2 bg-green-500 text-white rounded text-xs font-semibold"
                                       >
                                         PDF

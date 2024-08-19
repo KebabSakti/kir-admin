@@ -1,21 +1,21 @@
+import { server } from "../../common/config";
 import { Failure } from "../../common/error";
-import { Axios } from "../../common/instance";
-import { Payload } from "../../common/type";
+import { Axios, AxiosBase } from "../../common/instance";
 import { AuthAccountUpdateParam, AuthApi, AuthLoginParam } from "./auth_api";
 
 export class AuthRemote implements AuthApi {
-  async update(
-    param: AuthAccountUpdateParam,
-    payload?: Payload
-  ): Promise<void> {
+  init(): string | undefined {
+    const token = localStorage.getItem("token") ?? undefined;
+
+    return token;
+  }
+
+  async update(param: AuthAccountUpdateParam): Promise<void> {
     try {
       const response = await Axios({
-        url: `/auth`,
+        url: `${server}/auth`,
         method: "put",
         data: param,
-        headers: {
-          Authorization: `Bearer ${payload?.token}`,
-        },
       });
 
       return response.data;
@@ -26,8 +26,8 @@ export class AuthRemote implements AuthApi {
 
   async login(param: AuthLoginParam): Promise<string> {
     try {
-      const response = await Axios({
-        url: `/auth`,
+      const response = await AxiosBase({
+        url: `${server}/auth`,
         method: "post",
         data: param,
       });
@@ -45,12 +45,6 @@ export class AuthRemote implements AuthApi {
   }
 
   async emailResetLink(email: string): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-
-  init(): string | undefined {
-    const token = localStorage.getItem("token") ?? undefined;
-
-    return token;
+    console.log(email);
   }
 }

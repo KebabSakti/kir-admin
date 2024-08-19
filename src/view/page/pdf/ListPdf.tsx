@@ -6,6 +6,7 @@ import { LoadingContainer } from "../../component/LoadingContainer";
 import PageTitle from "../../component/PageTitle";
 import { usePdfApi } from "./PdfHook";
 import { toast } from "react-toastify";
+import { server } from "../../../common/config";
 
 export function ListPdf() {
   const pdfApi = usePdfApi();
@@ -111,22 +112,22 @@ export function ListPdf() {
                                   </td>
                                   <td className="text-sm text-start p-2 text-black dark:text-white">
                                     <a
-                                      href={item.stamp as string}
+                                      href={`${server}/${item.stamp}`}
                                       target="_blank"
                                     >
                                       <img
-                                        src={item.stamp as string}
+                                        src={`${server}/${item.stamp}`}
                                         className="w-10"
                                       />
                                     </a>
                                   </td>
                                   <td className="text-sm text-start p-2 text-black dark:text-white">
                                     <a
-                                      href={item.signature as string}
+                                      href={`${server}/${item.signature}`}
                                       target="_blank"
                                     >
                                       <img
-                                        src={item.signature as string}
+                                        src={`${server}/${item.signature}`}
                                         className="w-10"
                                       />
                                     </a>

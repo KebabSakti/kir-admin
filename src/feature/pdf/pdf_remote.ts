@@ -1,33 +1,36 @@
+import { server } from "../../common/config";
 import { Failure } from "../../common/error";
 import { Axios } from "../../common/instance";
-import { Payload } from "../../common/type";
 import { Pdf } from "./pdf";
 import { PdfApi, PdfCreateParam, PdfUpdateParam } from "./pdf_api";
 
 export class PdfRemote implements PdfApi {
-  async create(param: PdfCreateParam, payload?: Payload): Promise<void> {
+  async create(param: PdfCreateParam): Promise<void> {
     try {
+      const parameters: any = param;
+      const formData = new FormData();
+      formData.append("file", param.stamp as File);
+      formData.append("file", param.signature as File);
+
+      for (const key in parameters) {
+        formData.append(key, parameters[key]);
+      }
+
       await Axios({
-        url: "/admin/pdf",
+        url: `${server}/admin/pdf`,
         method: "post",
-        data: param,
-        headers: {
-          Authorization: `Bearer ${payload?.token}`,
-        },
+        data: formData,
       });
     } catch (error: any) {
       throw Failure(error.response.status, error.response.data);
     }
   }
 
-  async read(id: string, payload?: Payload): Promise<Pdf | undefined> {
+  async read(id: string): Promise<Pdf | undefined> {
     try {
       const response = await Axios({
-        url: `/admin/pdf/${id}/read`,
+        url: `${server}/admin/pdf/${id}/read`,
         method: "get",
-        headers: {
-          Authorization: `Bearer ${payload?.token}`,
-        },
       });
 
       return response.data;
@@ -36,15 +39,12 @@ export class PdfRemote implements PdfApi {
     }
   }
 
-  async update(param: PdfUpdateParam, payload?: Payload): Promise<void> {
+  async update(param: PdfUpdateParam): Promise<void> {
     try {
       const response = await Axios({
-        url: `/admin/pdf/`,
+        url: `${server}/admin/pdf/`,
         method: "put",
         data: param,
-        headers: {
-          Authorization: `Bearer ${payload?.token}`,
-        },
       });
 
       return response.data;
@@ -53,15 +53,12 @@ export class PdfRemote implements PdfApi {
     }
   }
 
-  async remove(id: string, payload?: Payload): Promise<void> {
+  async remove(id: string): Promise<void> {
     try {
       const response = await Axios({
-        url: `/admin/pdf/`,
+        url: `${server}/admin/pdf/`,
         method: "delete",
         data: id,
-        headers: {
-          Authorization: `Bearer ${payload?.token}`,
-        },
       });
 
       return response.data;
@@ -70,14 +67,11 @@ export class PdfRemote implements PdfApi {
     }
   }
 
-  async list(payload?: Payload): Promise<Pdf[]> {
+  async list(): Promise<Pdf[]> {
     try {
       const response = await Axios({
-        url: `/admin/pdf/`,
+        url: `${server}/admin/pdf/`,
         method: "get",
-        headers: {
-          Authorization: `Bearer ${payload?.token}`,
-        },
       });
 
       return response.data;

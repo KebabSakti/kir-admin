@@ -1,7 +1,4 @@
-import axios from "axios";
-import { server } from "./config";
+import { IAxios } from "../helper/axios";
 
-export const Axios = axios.create({
-  baseURL: server,
-  timeout: 1000,
-});
+export const Axios = IAxios({ withAuth: true });
+export const AxiosBase = IAxios({ withAuth: false });

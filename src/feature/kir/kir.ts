@@ -3,7 +3,7 @@ export interface Kir {
   certificateNumber?: string;
   director?: string;
   directorLevel?: string;
-  directorNip?: string;
+  directorNumber?: string;
   directorStamp?: string;
   directorSignature?: string;
   owner?: string;

@@ -9,6 +9,7 @@ import { editPdfInitialValues, editPdfValidationSchema } from "./pdf_form";
 import { PdfField, PdfSection, PdfUpload } from "./PdfComponent";
 import { usePdfApi } from "./PdfHook";
 import { toast } from "react-toastify";
+import { server } from "../../../common/config";
 
 export function EditPdf() {
   const { id } = useParams();
@@ -108,7 +109,7 @@ export function EditPdf() {
                           param={{
                             title: "Stempel",
                             name: "stamp",
-                            image: values.stamp,
+                            image: `${server}/${values.stamp}`,
                             setFieldValue: setFieldValue,
                           }}
                         />
@@ -116,7 +117,7 @@ export function EditPdf() {
                           param={{
                             title: "TTD",
                             name: "signature",
-                            image: values.signature,
+                            image: `${server}/${values.signature}`,
                             setFieldValue: setFieldValue,
                           }}
                         />

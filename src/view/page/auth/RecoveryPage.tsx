@@ -1,23 +1,49 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Context } from "../../../App";
+import logo from "../../../assets/image/logo.png";
 import { Status } from "../../../common/type";
 import { LoadingContainer } from "../../component/LoadingContainer";
 import PageTitle from "../../component/PageTitle";
 import { recoveryFormSchema } from "./auth_form";
-import { useAuthApi } from "./AuthHook";
 
 export function RecoveryPage() {
-  const authApi = useAuthApi();
+  const { authApi } = useContext(Context)!;
+
+  useEffect(() => {
+    if (
+      authApi.state.action == "emailResetLink" &&
+      authApi.state.status == Status.complete &&
+      authApi.state.error == undefined
+    ) {
+      toast.success(
+        "Link berhasil terkirim, cek email anda untuk reset password"
+      );
+    }
+
+    if (
+      authApi.state.action == "emailResetLink" &&
+      authApi.state.status == Status.complete &&
+      authApi.state.error != undefined
+    ) {
+      toast.error(authApi.state.error.message);
+    }
+  }, [authApi.state]);
 
   return (
     <>
-      <PageTitle title="Recovery Account | Uji Kir App" />
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="bg-white border-stroke dark:border-strokedark xl:w-1/4">
+      <PageTitle title="Sign In | Uji Kir App" />
+      <div className="flex justify-center items-center min-h-screen bg-gray dark:bg-black">
+        <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
           <LoadingContainer loading={authApi.state.status == Status.loading}>
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
+              <div className="flex items-center justify-center pb-6">
+                <img src={logo} className="w-20" />
+              </div>
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                Recover your account
+                Enter your email
               </h2>
 
               <Formik
@@ -61,7 +87,7 @@ export function RecoveryPage() {
                     <ErrorMessage
                       name="email"
                       component="div"
-                      className="text-red-500 px-2"
+                      className="text-red-500"
                     />
                   </div>
 
@@ -70,33 +96,17 @@ export function RecoveryPage() {
                       type="submit"
                       className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90 disabled:bg-bodydark disabled:border-bodydark"
                     >
-                      Send Email
+                      Email reset link
                     </button>
                   </div>
 
                   <div className="mt-6 text-center">
                     <p>
-                      Back to{" "}
                       <Link to="/" className="text-primary">
-                        Login Page
+                        Login Here
                       </Link>
                     </p>
                   </div>
-                  {(() => {
-                    if (
-                      authApi.state.status == Status.complete &&
-                      authApi.state.error != undefined
-                    ) {
-                      return (
-                        <div className="flex flex-col justify-center items-center gap-1 p-4 mt-6 rounded-lg bg-red-50 border border-red-100">
-                          <div>Error encountered</div>
-                          <div className="text-red-500">
-                            {authApi.state.error.message}
-                          </div>
-                        </div>
-                      );
-                    }
-                  })()}
                 </Form>
               </Formik>
             </div>

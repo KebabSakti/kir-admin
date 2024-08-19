@@ -23,6 +23,11 @@ export type Payload = {
   };
 };
 
+export type Pagination = {
+  skip?: number;
+  take?: number;
+};
+
 export type RequestResult<T> = {
   message?: string;
   data?: T | Array<T> | undefined;

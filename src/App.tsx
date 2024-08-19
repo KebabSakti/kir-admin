@@ -9,6 +9,7 @@ import Layout from "./view/component/Layout";
 import { ErrorPage } from "./view/page/ErrorPage";
 import { Middleware } from "./view/page/Middleware";
 import { AccountPage } from "./view/page/auth/AccountPage";
+import { AuthApiType, useAuthApi } from "./view/page/auth/AuthHook";
 import { LoginPage } from "./view/page/auth/LoginPage";
 import { RecoveryPage } from "./view/page/auth/RecoveryPage";
 import { AddKir } from "./view/page/kir/AddKir";
@@ -17,7 +18,6 @@ import { ListKir } from "./view/page/kir/ListKir";
 import { AddPdf } from "./view/page/pdf/AddPdf";
 import { EditPdf } from "./view/page/pdf/EditPdf";
 import { ListPdf } from "./view/page/pdf/ListPdf";
-import { AuthApiType, useAuthApi } from "./view/page/auth/AuthHook";
 
 type Dependencies = {
   authApi: AuthApiType;

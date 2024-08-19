@@ -1,5 +1,3 @@
-import { Payload } from "../../common/type";
-
 export type AuthAccountUpdateParam = {
   email: string;
   oldPassword: string;
@@ -12,12 +10,9 @@ export type AuthLoginParam = {
 };
 
 export abstract class AuthApi {
-  abstract update(
-    param: AuthAccountUpdateParam,
-    payload?: Payload
-  ): Promise<void>;
-  abstract login(param: AuthLoginParam, payload?: Payload): Promise<string>;
+  abstract update(param: AuthAccountUpdateParam): Promise<void>;
+  abstract login(param: AuthLoginParam): Promise<string>;
   abstract logout(): void;
-  abstract init(): string|undefined;
-  abstract emailResetLink(email: string, payload?: Payload): Promise<void>;
+  abstract emailResetLink(email: string): Promise<void>;
+  abstract init(): string | undefined;
 }

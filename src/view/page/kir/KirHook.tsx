@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Payload, State, Status } from "../../../common/type";
+import { State, Status } from "../../../common/type";
 import { Kir } from "../../../feature/kir/kir";
 import {
   KirCreateParam,
@@ -9,12 +9,12 @@ import {
 import { kirApi } from "../../../feature/loader";
 
 export type KirApiType = {
-  create(param: KirCreateParam, payload?: Payload): Promise<void>;
-  read(id: string, payload?: Payload): Promise<void>;
-  update(param: KirUpdateParam, payload?: Payload): Promise<void>;
-  remove(id: string, payload?: Payload): Promise<void>;
-  list(param?: KirListParam, payload?: Payload): Promise<void>;
-  print(id: string, payload?: Payload): Promise<void>;
+  create(param: KirCreateParam): Promise<void>;
+  read(id: string): Promise<void>;
+  update(param: KirUpdateParam): Promise<void>;
+  remove(id: string): Promise<void>;
+  list(param?: KirListParam): Promise<void>;
+  print(id: string): Promise<void>;
   state: State<Kir>;
 };
 
@@ -24,14 +24,11 @@ export function useKirApi(): KirApiType {
     status: Status.idle,
   });
 
-  async function create(
-    param: KirCreateParam,
-    payload?: Payload
-  ): Promise<void> {
+  async function create(param: KirCreateParam): Promise<void> {
     setState({ status: Status.loading, action: "create" });
 
     await kirApi
-      .create(param, payload)
+      .create(param)
       .then(() => {
         setState({
           status: Status.complete,
@@ -47,11 +44,11 @@ export function useKirApi(): KirApiType {
       });
   }
 
-  async function read(id: string, payload?: Payload): Promise<void> {
+  async function read(id: string): Promise<void> {
     setState({ status: Status.loading, action: "read" });
 
     await kirApi
-      .read(id, payload)
+      .read(id)
       .then((result) => {
         setState({
           status: Status.complete,
@@ -68,14 +65,11 @@ export function useKirApi(): KirApiType {
       });
   }
 
-  async function update(
-    param: KirUpdateParam,
-    payload?: Payload
-  ): Promise<void> {
+  async function update(param: KirUpdateParam): Promise<void> {
     setState({ status: Status.loading, action: "update" });
 
     await kirApi
-      .update(param, payload)
+      .update(param)
       .then(() => {
         setState({
           status: Status.complete,
@@ -91,11 +85,11 @@ export function useKirApi(): KirApiType {
       });
   }
 
-  async function remove(id: string, payload?: Payload): Promise<void> {
+  async function remove(id: string): Promise<void> {
     setState({ status: Status.loading, action: "remove" });
 
     await kirApi
-      .remove(id, payload)
+      .remove(id)
       .then(() => {
         setState({
           status: Status.complete,
@@ -111,11 +105,11 @@ export function useKirApi(): KirApiType {
       });
   }
 
-  async function list(param?: KirListParam, payload?: Payload): Promise<void> {
+  async function list(param?: KirListParam): Promise<void> {
     setState({ status: Status.loading, action: "list" });
 
     await kirApi
-      .list(param, payload)
+      .list(param)
       .then((result) => {
         setState({
           status: Status.complete,
