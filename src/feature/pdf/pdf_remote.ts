@@ -7,10 +7,8 @@ import { PdfApi, PdfCreateParam, PdfUpdateParam } from "./pdf_api";
 export class PdfRemote implements PdfApi {
   async create(param: PdfCreateParam): Promise<void> {
     try {
-      const parameters: any = param;
       const formData = new FormData();
-      formData.append("file", param.stamp as File);
-      formData.append("file", param.signature as File);
+      const parameters: any = param;
 
       for (const key in parameters) {
         formData.append(key, parameters[key]);

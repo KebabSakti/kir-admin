@@ -14,7 +14,6 @@ export type KirApiType = {
   update(param: KirUpdateParam): Promise<void>;
   remove(id: string): Promise<void>;
   list(param?: KirListParam): Promise<void>;
-  print(id: string): Promise<void>;
   state: State<Kir>;
 };
 
@@ -126,25 +125,5 @@ export function useKirApi(): KirApiType {
       });
   }
 
-  async function print(id: string): Promise<void> {
-    setState({ status: Status.loading, action: "print" });
-
-    await kirApi
-      .print(id)
-      .then(() => {
-        setState({
-          status: Status.complete,
-          action: "print",
-        });
-      })
-      .catch((error: Error) => {
-        setState({
-          status: Status.complete,
-          action: "print",
-          error: error,
-        });
-      });
-  }
-
-  return { create, read, update, remove, list, print, state };
+  return { create, read, update, remove, list, state };
 }

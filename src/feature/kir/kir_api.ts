@@ -16,5 +16,4 @@ export abstract class KirApi {
   abstract update(param: KirUpdateParam): Promise<void>;
   abstract remove(id: string): Promise<void>;
   abstract list(param?: KirListParam): Promise<Kir[]>;
-  abstract print(id: string): Promise<void>;
 }

@@ -15,23 +15,9 @@ export class KirRemote implements KirApi {
       const formData = new FormData();
       const parameters: any = param;
 
-      const exceptions = new Set([
-        "frontPic",
-        "backPic",
-        "rightPic",
-        "leftPic",
-      ]);
-
       for (const key in parameters) {
-        if (!exceptions.has(key)) {
-          formData.append(key, parameters[key]);
-        }
+        formData.append(key, parameters[key]);
       }
-
-      formData.append("file", param.frontPic!);
-      formData.append("file", param.backPic!);
-      formData.append("file", param.rightPic!);
-      formData.append("file", param.leftPic!);
 
       await Axios({
         url: `${server}/admin/kir`,
@@ -58,13 +44,18 @@ export class KirRemote implements KirApi {
 
   async update(param: KirUpdateParam): Promise<void> {
     try {
-      const response = await Axios({
+      const formData = new FormData();
+      const parameters: any = param;
+
+      for (const key in parameters) {
+        formData.append(key, parameters[key]);
+      }
+
+      await Axios({
         url: `${server}/admin/kir/`,
         method: "put",
-        data: param,
+        data: formData,
       });
-
-      return response.data;
     } catch (error: any) {
       throw Failure(error.response.status, error.response.data);
     }
@@ -75,7 +66,7 @@ export class KirRemote implements KirApi {
       const response = await Axios({
         url: `${server}/admin/kir/`,
         method: "delete",
-        data: id,
+        data: { id: id },
       });
 
       return response.data;
@@ -96,9 +87,5 @@ export class KirRemote implements KirApi {
     } catch (error: any) {
       throw Failure(error.response.status, error.response.data);
     }
-  }
-
-  async print(id: string): Promise<void> {
-    console.log(id);
   }
 }

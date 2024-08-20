@@ -101,7 +101,7 @@ export function EditKir() {
             initialValues={initialValues}
             validationSchema={addKirValidationSchema}
             onSubmit={(values) => {
-              kirApi.update(values);
+              kirApi.update({ ...values, id: id });
             }}
           >
             {({ setFieldValue, setValues, values }) => {
