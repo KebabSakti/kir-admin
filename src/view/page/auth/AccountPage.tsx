@@ -1,7 +1,6 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useContext } from "react";
+import { Context } from "../../../App";
 import { Status } from "../../../common/type";
 import Breadcrumb from "../../component/Breadcrumb";
 import { LoadingContainer } from "../../component/LoadingContainer";
@@ -10,37 +9,9 @@ import {
   accountUpdateFormSchema,
   accountUpdateInitialValues,
 } from "./auth_form";
-import { useAuthApi } from "./AuthHook";
 
 export function AccountPage() {
-  const authApi = useAuthApi();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (
-      authApi.state.action == "update" &&
-      authApi.state.status == Status.complete &&
-      authApi.state.error == undefined
-    ) {
-      authApi.logout();
-      toast.success("Akun berhasil di update, harap login ulang");
-    }
-
-    if (
-      authApi.state.action == "update" &&
-      authApi.state.status == Status.complete &&
-      authApi.state.error != undefined
-    ) {
-      toast.error(authApi.state.error.message);
-    }
-
-    if (
-      authApi.state.action == "logout" &&
-      authApi.state.status == Status.complete
-    ) {
-      navigate("/", { replace: true });
-    }
-  }, [authApi.state]);
+  const { authApi } = useContext(Context)!;
 
   return (
     <>
@@ -67,7 +38,7 @@ export function AccountPage() {
                     </div>
                     <div className="p-7">
                       <div className="flex flex-col gap-4">
-                        <div className="flex flex-col gap-2">
+                        {/* <div className="flex flex-col gap-2">
                           <div className="font-medium text-black dark:text-white">
                             Email
                           </div>
@@ -84,7 +55,7 @@ export function AccountPage() {
                               className="text-red-500"
                             />
                           </div>
-                        </div>
+                        </div> */}
 
                         <div className="flex flex-col gap-2">
                           <div className="font-medium text-black dark:text-white">
@@ -131,7 +102,7 @@ export function AccountPage() {
                   type="submit"
                   className="p-2 w-full h-12 bg-primary rounded text-white"
                 >
-                  Update Akun
+                  Ganti Password
                 </button>
               </div>
             </Form>

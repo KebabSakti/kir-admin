@@ -1,6 +1,6 @@
 import { server } from "../../common/config";
 import { Failure } from "../../common/error";
-import { Axios } from "../../common/instance";
+import { Axios } from "../../helper/axios";
 import { Pdf } from "./pdf";
 import { PdfApi, PdfCreateParam, PdfUpdateParam } from "./pdf_api";
 
@@ -39,13 +39,18 @@ export class PdfRemote implements PdfApi {
 
   async update(param: PdfUpdateParam): Promise<void> {
     try {
-      const response = await Axios({
+      const formData = new FormData();
+      const parameters: any = param;
+
+      for (const key in parameters) {
+        formData.append(key, parameters[key]);
+      }
+
+      await Axios({
         url: `${server}/admin/pdf/`,
         method: "put",
-        data: param,
+        data: formData,
       });
-
-      return response.data;
     } catch (error: any) {
       throw Failure(error.response.status, error.response.data);
     }
@@ -56,7 +61,7 @@ export class PdfRemote implements PdfApi {
       const response = await Axios({
         url: `${server}/admin/pdf/`,
         method: "delete",
-        data: id,
+        data: { id: id },
       });
 
       return response.data;

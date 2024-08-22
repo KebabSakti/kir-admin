@@ -1,6 +1,6 @@
 import { server } from "../../common/config";
 import { Failure } from "../../common/error";
-import { Axios } from "../../common/instance";
+import { Axios } from "../../helper/axios";
 import { Kir } from "./kir";
 import {
   KirApi,

@@ -75,7 +75,12 @@ export function useAuthApi(): AuthApiType {
         });
       })
       .catch((error: Error) => {
-        setState({ status: Status.complete, action: "update", error: error });
+        setState({
+          ...state,
+          status: Status.complete,
+          action: "update",
+          error: error,
+        });
       });
   }
 

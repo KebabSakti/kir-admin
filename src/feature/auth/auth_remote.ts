@@ -1,6 +1,6 @@
 import { server } from "../../common/config";
 import { Failure } from "../../common/error";
-import { Axios, AxiosBase } from "../../common/instance";
+import { Axios, AxiosBase } from "../../helper/axios";
 import { AuthAccountUpdateParam, AuthApi, AuthLoginParam } from "./auth_api";
 
 export class AuthRemote implements AuthApi {

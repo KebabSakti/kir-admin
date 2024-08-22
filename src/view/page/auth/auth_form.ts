@@ -14,15 +14,15 @@ export const recoveryFormSchema = Yup.object({
 });
 
 export const accountUpdateFormSchema = Yup.object({
-  email: Yup.string()
-    .email("* Email tidak valid")
-    .required("* Tidak boleh kosong"),
+  // email: Yup.string()
+  //   .email("* Email tidak valid")
+  //   .required("* Tidak boleh kosong"),
   oldPassword: Yup.string().required("* Tidak boleh kosong"),
   newPassword: Yup.string().required("* Tidak boleh kosong"),
 });
 
 export const accountUpdateInitialValues = {
-  email: "",
+  // email: "",
   oldPassword: "",
   newPassword: "",
 };

@@ -1,13 +1,13 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useContext, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Context } from "../../../App";
+import logo from "../../../assets/image/logo.png";
 import { Status } from "../../../common/type";
 import { LoadingContainer } from "../../component/LoadingContainer";
 import PageTitle from "../../component/PageTitle";
 import { loginFormSchema } from "./auth_form";
-import logo from "../../../assets/image/logo.png";
-import { toast } from "react-toastify";
 
 export function LoginPage() {
   const { authApi } = useContext(Context)!;
@@ -140,14 +140,14 @@ export function LoginPage() {
                     </button>
                   </div>
 
-                  <div className="mt-6 text-center">
+                  {/* <div className="mt-6 text-center">
                     <p>
                       Forgot your password?{" "}
                       <Link to="/recovery" className="text-primary">
                         Reset Here
                       </Link>
                     </p>
-                  </div>
+                  </div> */}
                 </Form>
               </Formik>
             </div>

@@ -1,5 +1,5 @@
 export type AuthAccountUpdateParam = {
-  email: string;
+  // email: string;
   oldPassword: string;
   newPassword: string;
 };

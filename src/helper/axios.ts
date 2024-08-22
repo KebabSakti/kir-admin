@@ -3,7 +3,7 @@ import { authApi } from "../feature/loader";
 
 const instance = axios.create();
 
-export function IAxios(option: { withAuth: boolean }): AxiosInstance {
+function IAxios(option: { withAuth: boolean }): AxiosInstance {
   if (option.withAuth) {
     instance.interceptors.request.use((config) => {
       const token = authApi.init();
@@ -18,3 +18,6 @@ export function IAxios(option: { withAuth: boolean }): AxiosInstance {
 
   return instance;
 }
+
+export const Axios = IAxios({ withAuth: true });
+export const AxiosBase = IAxios({ withAuth: false });
